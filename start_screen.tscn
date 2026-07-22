@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://bmcj6g2n8mabc"]
+
+[node name="Start Screen" type="CanvasLayer" unique_id=281103666]
+
+[node name="Title" type="RichTextLabel" parent="." unique_id=1134776170]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -183.0
+offset_right = 183.0
+offset_bottom = 128.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_font_sizes/normal_font_size = 32
+text = "Countdown Game"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Credits" type="RichTextLabel" parent="." unique_id=1709521791]
+anchors_preset = -1
+anchor_left = 0.4027778
+anchor_top = 0.5555556
+anchor_right = 0.7048611
+anchor_bottom = 1.0
+offset_left = -64.0
+offset_top = -3.0517578e-05
+offset_right = -64.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/normal_font_size = 32
+text = "Made for GMTK Game Jam 2026 By:
+
+nix, grok, and shirkbot
+
+Thanks for playing!"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Button" type="Button" parent="." unique_id=86969909]
+anchors_preset = -1
+anchor_left = 0.47916666
+anchor_top = 0.37037036
+anchor_right = 0.5182292
+anchor_bottom = 0.41820988
+offset_top = 1.5258789e-05
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 32
+text = "Play!"
+metadata/_edit_use_anchors_ = true
