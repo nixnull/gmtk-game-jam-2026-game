@@ -2,7 +2,7 @@ extends CanvasLayer
 
 var final_score = 0
 
-var selected = false
+signal restart
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -20,4 +20,4 @@ func hide_screen():
 	self.visible = false
 
 func _on_button_pressed() -> void:
-	selected = !selected
+	restart.emit()

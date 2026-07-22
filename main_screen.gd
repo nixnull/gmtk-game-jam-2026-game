@@ -19,3 +19,8 @@ func _on_start_screen_start_game() -> void:
 func _on_game_screen_game_over(score) -> void:
 	$GameScreen.visible = false
 	$FinalScreen.display_screen(score)
+
+func _on_final_screen_restart() -> void:
+	$FinalScreen.visible = false
+	$"StartScreen".visible = true
+	

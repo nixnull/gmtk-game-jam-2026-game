@@ -17,3 +17,4 @@ visible = false
 
 [connection signal="start_game" from="StartScreen" to="." method="_on_start_screen_start_game"]
 [connection signal="game_over" from="GameScreen" to="." method="_on_game_screen_game_over"]
+[connection signal="restart" from="FinalScreen" to="." method="_on_final_screen_restart"]

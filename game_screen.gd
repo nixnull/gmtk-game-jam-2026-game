@@ -16,6 +16,7 @@ func _process(delta: float) -> void:
 func start():
 	self.visible = true
 	$Bank.draw_cards(3)
+	turns_left = 10
 	update_turns(0)
 	
 func stop():
