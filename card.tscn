@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://belvm77225t2m"]
+
+[ext_resource type="Texture2D" uid="uid://7nn20fvxr0pq" path="res://assets/green_card.png" id="1_kikvd"]
+[ext_resource type="Script" uid="uid://bbxq81ibqj15q" path="res://card.gd" id="1_rjlel"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_elxoo"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_kikvd")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Card" type="Node2D" unique_id=1835483064]
+script = ExtResource("1_rjlel")
+
+[node name="Background" type="AnimatedSprite2D" parent="." unique_id=963557881]
+sprite_frames = SubResource("SpriteFrames_elxoo")
+
+[node name="Title" type="RichTextLabel" parent="." unique_id=21012014]
+offset_left = -118.0
+offset_top = -167.0
+offset_right = 118.0
+offset_bottom = -104.0
+theme_override_font_sizes/normal_font_size = 30
+text = "Card Title"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Desc" type="RichTextLabel" parent="." unique_id=1668916166]
+offset_left = -109.0
+offset_top = -96.0
+offset_right = 109.0
+offset_bottom = 168.0
+theme_override_font_sizes/normal_font_size = 26
+text = "This is what the card does. It should be able to fit several words just fine. Blah."
+horizontal_alignment = 1
+
+[node name="Buy" type="Button" parent="." unique_id=1602056451]
+offset_left = -125.0
+offset_top = -176.0
+offset_right = 127.0
+offset_bottom = 177.0
+
+[connection signal="pressed" from="Buy" to="." method="_on_buy_pressed"]

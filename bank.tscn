@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://dt3217l4kq7j4"]
+
+[ext_resource type="Script" uid="uid://dljqoi0ogfgfb" path="res://bank.gd" id="1_070a6"]
+
+[node name="Bank" type="Node2D" unique_id=728236113]
+script = ExtResource("1_070a6")
+
+[node name="Background" type="AnimatedSprite2D" parent="." unique_id=783255834]

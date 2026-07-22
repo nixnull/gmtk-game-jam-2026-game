@@ -1,6 +1,9 @@
 [gd_scene format=3 uid="uid://bmcj6g2n8mabc"]
 
-[node name="Start Screen" type="CanvasLayer" unique_id=281103666]
+[ext_resource type="Script" uid="uid://cao7blo8m0yp4" path="res://start_screen.gd" id="1_ncxyx"]
+
+[node name="StartScreen" type="CanvasLayer" unique_id=281103666]
+script = ExtResource("1_ncxyx")
 
 [node name="Title" type="RichTextLabel" parent="." unique_id=1134776170]
 anchors_preset = 5
@@ -49,3 +52,5 @@ grow_vertical = 2
 theme_override_font_sizes/font_size = 32
 text = "Play!"
 metadata/_edit_use_anchors_ = true
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
