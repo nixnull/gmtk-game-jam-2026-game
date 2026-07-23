@@ -32,8 +32,11 @@ func _process(delta: float) -> void:
 func start():
 	self.visible = true
 	score = 0
+	$Score.text = "Score:\n" + str(score)
 	$Bank.new_hand(3)
 	turns_left = 10
+	owned_cards = {}
+	$Inventory.display_inventory(owned_cards)
 	update_turns(0)
 	
 func stop():
