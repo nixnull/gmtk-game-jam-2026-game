@@ -27,6 +27,12 @@ var card_types = {
 		"Function": proc_timer_multiple, "Parameters": [fmod,7,7]
 	},
 
+	"Prime Meridian": {
+		"Desc": "Gain the turn number of points if the turn is prime.",
+		"Cost": 1,
+		"Function": proc_is_prime, "Parameters": []
+	},
+
 }
 
 var turns_left = 25
@@ -86,16 +92,33 @@ func _on_buy_pressed() -> void:
 	
 	if selected_cards.is_empty():
 		print("empty")
-	
-	update_turns(total_cost)
+	else:
+		update_turns(total_cost)
+			
+		$Bank.new_hand(3)
 		
-	$Bank.new_hand(3)
+		$Inventory.display_inventory(owned_cards)
+		
+		$Score.text = "Score:\n" + str(score)
+		
+		print("Ok, ", turns_left, " turns left...")
 	
-	$Inventory.display_inventory(owned_cards)
+func proc_is_prime(parameters):
+	var number = turns_left
+	var is_prime = true
 	
-	$Score.text = "Score:\n" + str(score)
+	if number in [0,1]:
+		is_prime = false
+	elif number == 2:
+		is_prime = true
+	else:
+		for i in range(2,floor(number/2)):
+			if fmod(number, i) == 0:
+				is_prime = false
 	
-	print("Ok, ", turns_left, " turns left...")
+	print(number, " is prime? ", is_prime)
+	if is_prime:
+		score += turns_left
 
 func proc_timer_multiple(parameters):
 	var proc_condition = parameters[0]
