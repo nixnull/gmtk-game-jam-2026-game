@@ -2,41 +2,41 @@ extends Node
 
 var card_types = {
 	"One for Ones": {
-		"Desc": "Gain 1 point whenever the turn countdown is a multiple of one.",
+		"Desc": "Gain $1 whenever years left is a multiple of one.",
 		"Cost": 1,
 		"Function": proc_timer_multiple, "Parameters": [fmod,1,1]
 	},
 	"Two for Twos": {
-		"Desc": "Gain 2 points whenever the turn countdown is a multiple of two.",
+		"Desc": "Gain $2 whenever years left is a multiple of two.",
 		"Cost": 1,
 		"Function": proc_timer_multiple, "Parameters": [fmod,2,2]
 	},
 	"Three for Threes": {
-		"Desc": "Gain 3 points whenever the turn countdown is a multiple of three.",
+		"Desc": "Gain $3 whenever years left is a multiple of three.",
 		"Cost": 1,
 		"Function": proc_timer_multiple, "Parameters": [fmod,3,3]
 	},
 	"Five for Fives": {
-		"Desc": "Gain 5 points whenever the turn countdown is a multiple of five.",
+		"Desc": "Gain $5 whenever years left is a multiple of five.",
 		"Cost": 1,
 		"Function": proc_timer_multiple, "Parameters": [fmod,5,5]
 	},
 	"Seven for Sevens": {
-		"Desc": "Gain 7 points whenever the turn countdown is a multiple of seven.",
+		"Desc": "Gain $7 whenever years left is a multiple of seven.",
 		"Cost": 1,
 		"Function": proc_timer_multiple, "Parameters": [fmod,7,7]
 	},
 
 	"Prime Meridian": {
-		"Desc": "Gain the turn number of points if the turn is prime.",
+		"Desc": "Gain the number of years left as money if the years left is prime.",
 		"Cost": 1,
 		"Function": proc_is_prime, "Parameters": []
 	},
 
 }
 
-var turns_left = 25
-var score = 0
+var turns_left = 50
+var score = -1000
 
 var owned_cards = {} #title: number
 
@@ -53,10 +53,9 @@ func _process(delta: float) -> void:
 	
 func start():
 	self.visible = true
-	score = 0
-	$Score.text = "Score:\n" + str(score)
+	update_score(-2000, true)
 	$Bank.new_hand(3)
-	turns_left = 25
+	turns_left = 50
 	owned_cards = {}
 	$Inventory.display_inventory(owned_cards)
 	update_turns(0)
@@ -66,7 +65,7 @@ func stop():
 	
 func update_turns(turns_lost):
 	turns_left -= turns_lost
-	$"TurnsLeft".text = "Turns Remaining\n" + str(turns_left)
+	$"TurnsLeft".text = "Years Remaining\n" + str(turns_left)
 	if turns_left <= 0:
 		game_over.emit(score)
 		
@@ -75,6 +74,21 @@ func update_turns(turns_lost):
 		for i in range(owned_cards[card]):
 			card_types[card]["Function"].call(card_types[card]["Parameters"])
 
+func update_score(amount, setting=false):
+	var valiance = ""
+	if setting:
+		score = amount
+	else:
+		score += amount
+	if score >= 0:
+		valiance = "Profit"
+		$Score.set("theme_override_colors/default_color", Color(0.064, 0.632, 0.422, 1.0))
+	else:
+		valiance = "Debt"
+		$Score.set("theme_override_colors/default_color", Color(0.996, 0.0, 0.164, 1.0))
+		
+	$Score.text = valiance + "\n" + str(score)
+	
 func _on_buy_pressed() -> void:
 	var selected_cards = []
 	selected_cards = $Bank.report_selected()
@@ -99,9 +113,7 @@ func _on_buy_pressed() -> void:
 		
 		$Inventory.display_inventory(owned_cards)
 		
-		$Score.text = "Score:\n" + str(score)
-		
-		print("Ok, ", turns_left, " turns left...")
+		print("Ok, ", turns_left, " years left...")
 	
 func proc_is_prime(parameters):
 	var number = turns_left
@@ -118,7 +130,7 @@ func proc_is_prime(parameters):
 	
 	print(number, " is prime? ", is_prime)
 	if is_prime:
-		score += turns_left
+		update_score(turns_left)
 
 func proc_timer_multiple(parameters):
 	var proc_condition = parameters[0]
@@ -128,7 +140,7 @@ func proc_timer_multiple(parameters):
 	print("Is ", turns_left, " a multiple of ", proc_compare_to, "?")
 	
 	if proc_condition.call(turns_left, proc_compare_to) == 0:
-		score += int(reward)
+		update_score(int(reward))
 		print("Yes!")
 	else:
 		print("No :(")
