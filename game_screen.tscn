@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://dt3217l4kq7j4" path="res://bank.tscn" id="1_t5odh"]
 [ext_resource type="Script" uid="uid://bagkmk37aneck" path="res://game_screen.gd" id="1_xwjjp"]
 [ext_resource type="PackedScene" uid="uid://e0knnc7cu0fm" path="res://inventory.tscn" id="3_norob"]
+[ext_resource type="AudioStream" uid="uid://cfi533bmw8om7" path="res://assets/kenney sfx/handleCoins2.ogg" id="4_yla3h"]
 
 [node name="GameScreen" type="CanvasLayer" unique_id=1156669678]
 script = ExtResource("1_xwjjp")
@@ -57,5 +58,8 @@ text = "Debt
 -200"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="BuyAudio" type="AudioStreamPlayer" parent="." unique_id=1338669406]
+stream = ExtResource("4_yla3h")
 
 [connection signal="pressed" from="Buy" to="." method="_on_buy_pressed"]

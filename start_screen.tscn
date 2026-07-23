@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bmcj6g2n8mabc"]
 
 [ext_resource type="Script" uid="uid://cao7blo8m0yp4" path="res://start_screen.gd" id="1_ncxyx"]
+[ext_resource type="AudioStream" uid="uid://0yhe3hq37fkf" path="res://assets/kenney sfx/metalClick.ogg" id="2_pevhg"]
 
 [node name="StartScreen" type="CanvasLayer" unique_id=281103666]
 script = ExtResource("1_ncxyx")
@@ -22,22 +23,26 @@ vertical_alignment = 1
 
 [node name="Credits" type="RichTextLabel" parent="." unique_id=1709521791]
 anchors_preset = -1
-anchor_left = 0.4027778
-anchor_top = 0.5555556
-anchor_right = 0.7048611
+anchor_left = 0.5503472
+anchor_top = 0.29629636
+anchor_right = 0.9375
 anchor_bottom = 1.0
-offset_left = -64.0
+offset_left = 70.0
 offset_top = -3.0517578e-05
-offset_right = -64.0
+offset_right = 70.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_font_sizes/normal_font_size = 32
-text = "Made for GMTK Game Jam 2026 By:
+text = "Made for GMTK Game Jam 2026
 
-nix, grok, and shirkbot
+Code: nix, shirkbot
+Music: grok
+
+SFX from Kenney.nl
 
 Thanks for playing!"
 horizontal_alignment = 1
+vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
 
 [node name="Button" type="Button" parent="." unique_id=86969909]
@@ -52,5 +57,21 @@ grow_vertical = 2
 theme_override_font_sizes/font_size = 32
 text = "Play!"
 metadata/_edit_use_anchors_ = true
+
+[node name="StartSFX" type="AudioStreamPlayer" parent="." unique_id=340868847]
+stream = ExtResource("2_pevhg")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=359517470]
+offset_top = 192.0
+offset_right = 448.0
+offset_bottom = 648.0
+theme_override_font_sizes/normal_font_size = 25
+text = "You owe a great debt to Down, Count of the Fae Kingdom. If you do not pay before the end of your life, you will spend afterlife indebted to him.
+
+Luckily, you can bargain with other Fae to trade years of your life boons.
+
+Pay off your life before it's over, so that you may at least be free in the afterlife."
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

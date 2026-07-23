@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dusjupyjf6ao"]
 
 [ext_resource type="Script" uid="uid://bgu2uscuxeb8k" path="res://final_screen.gd" id="1_lbqom"]
+[ext_resource type="AudioStream" uid="uid://0yhe3hq37fkf" path="res://assets/kenney sfx/metalClick.ogg" id="2_buil8"]
 
 [node name="FinalScreen" type="CanvasLayer" unique_id=355368161]
 script = ExtResource("1_lbqom")
@@ -33,5 +34,8 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 30
 text = "Try Again"
+
+[node name="RestartSFX" type="AudioStreamPlayer" parent="." unique_id=979658061]
+stream = ExtResource("2_buil8")
 
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

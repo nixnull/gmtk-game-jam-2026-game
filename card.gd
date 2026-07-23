@@ -20,9 +20,11 @@ func get_title():
 func _on_buy_pressed() -> void:
 	selected = !selected
 	if $Buy.button_pressed:
+		$SelectAudio.play()
 		$Background.modulate = "#aaaaaa"
 		set_happening("Buying!")
 	else:
+		$UnselectAudio.play()
 		$Background.modulate = "#ffffff"
 		$HappeningLabel.visible = false
 		

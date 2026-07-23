@@ -2,6 +2,8 @@
 
 [ext_resource type="Texture2D" uid="uid://7nn20fvxr0pq" path="res://assets/green_card.png" id="1_kikvd"]
 [ext_resource type="Script" uid="uid://bbxq81ibqj15q" path="res://card.gd" id="1_rjlel"]
+[ext_resource type="AudioStream" uid="uid://bf5wxbonaesv3" path="res://assets/kenney sfx/handleSmallLeather.ogg" id="3_e484p"]
+[ext_resource type="AudioStream" uid="uid://cpgtjymb5kypr" path="res://assets/kenney sfx/handleSmallLeather2.ogg" id="4_fpac0"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_elxoo"]
 animations = [{
@@ -60,5 +62,11 @@ theme_override_font_sizes/normal_font_size = 28
 text = "Buying!"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="SelectAudio" type="AudioStreamPlayer" parent="." unique_id=114868112]
+stream = ExtResource("3_e484p")
+
+[node name="UnselectAudio" type="AudioStreamPlayer" parent="." unique_id=1932432052]
+stream = ExtResource("4_fpac0")
 
 [connection signal="pressed" from="Buy" to="." method="_on_buy_pressed"]

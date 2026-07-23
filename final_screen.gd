@@ -20,4 +20,5 @@ func hide_screen():
 	self.visible = false
 
 func _on_button_pressed() -> void:
+	$RestartSFX.play()
 	restart.emit()

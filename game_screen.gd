@@ -107,6 +107,7 @@ func _on_buy_pressed() -> void:
 	if selected_cards.is_empty():
 		print("empty")
 	else:
+		$BuyAudio.play()
 		update_turns(total_cost)
 			
 		$Bank.new_hand(3)
