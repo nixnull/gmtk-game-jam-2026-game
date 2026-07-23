@@ -51,9 +51,10 @@ anchor_right = 1.0
 offset_left = -144.0
 offset_bottom = 88.0
 grow_horizontal = 0
+theme_override_colors/default_color = Color(1, 0.23529412, 0.39607844, 1)
 theme_override_font_sizes/normal_font_size = 30
-text = "Score
-0"
+text = "Debt
+-200"
 horizontal_alignment = 1
 vertical_alignment = 1
 

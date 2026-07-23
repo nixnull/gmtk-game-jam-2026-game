@@ -30,7 +30,7 @@ var card_types = {
 }
 
 var turns_left = 25
-var score = 0
+var score = -1000
 
 var owned_cards = {} #title: number
 
@@ -47,8 +47,8 @@ func _process(delta: float) -> void:
 	
 func start():
 	self.visible = true
-	score = 0
-	$Score.text = "Score:\n" + str(score)
+	score = -200
+	$Score.text = "Debt:\n" + str(score)
 	$Bank.new_hand(3)
 	turns_left = 25
 	owned_cards = {}
@@ -93,7 +93,7 @@ func _on_buy_pressed() -> void:
 	
 	$Inventory.display_inventory(owned_cards)
 	
-	$Score.text = "Score:\n" + str(score)
+	$Score.text = "Debt:\n" + str(score)
 	
 	print("Ok, ", turns_left, " turns left...")
 
