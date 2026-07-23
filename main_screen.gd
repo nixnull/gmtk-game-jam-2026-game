@@ -1,9 +1,5 @@
 extends Node
 
-var cards_owned = []
-var cards_available = []
-var cards_buying = []
-
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	$"StartScreen".visible = true

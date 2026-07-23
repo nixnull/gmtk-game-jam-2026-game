@@ -4,17 +4,17 @@ var card_types = {
 	"Five for Fives": {
 		"Desc": "Gain 5 points whenever the turn countdown is a multiple of five.",
 		"Cost": 1,
-		"Function": print, "Parameters": "testing firstclass functions"
+		"Function": proc_timer_multiple, "Parameters": [fmod,5,5]
 	},
 	"One for Ones": {
 		"Desc": "Gain 1 point whenever the turn countdown is a multiple of one.",
 		"Cost": 1,
-		"Function": print, "Parameters": "testing first class functions!"
+		"Function": proc_timer_multiple, "Parameters": [fmod,1,1]
 	}
 }
 
 var turns_left = 10
-var score = 10
+var score = 0
 
 var owned_cards = {} #title: number
 
@@ -31,6 +31,7 @@ func _process(delta: float) -> void:
 	
 func start():
 	self.visible = true
+	score = 0
 	$Bank.new_hand(3)
 	turns_left = 10
 	update_turns(0)
@@ -43,6 +44,11 @@ func update_turns(turns_lost):
 	$"TurnsLeft".text = "Turns Remaining\n" + str(turns_left)
 	if turns_left <= 0:
 		game_over.emit(score)
+		
+	#Run Card functions
+	for card in owned_cards:
+		for i in range(owned_cards[card]):
+			card_types[card]["Function"].call(card_types[card]["Parameters"])
 
 func _on_buy_pressed() -> void:
 	var selected_cards = []
@@ -67,3 +73,18 @@ func _on_buy_pressed() -> void:
 	$Bank.new_hand(3)
 	
 	$Inventory.display_inventory(owned_cards)
+	
+	$Score.text = "Score:\n" + str(score)
+
+func proc_timer_multiple(parameters):
+	var proc_condition = parameters[0]
+	var proc_compare_to = parameters[1]
+	var reward = parameters[2]
+	
+	print("Is ", turns_left, " a multiple of ", proc_compare_to, "?")
+	
+	if proc_condition.call(turns_left, proc_compare_to) == 0:
+		score += int(reward)
+		print("Yes!")
+	else:
+		print("No :(")
