@@ -1,20 +1,32 @@
 extends Node2D
 
-var title = "Five for Fives"
-var desc = "Gain 5 points when the countdown timer is a multiple of 5."
-var cost = 1
-
 var selected
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	$Title.text = title
-	$Desc.text = desc
-	cost = 1
+	pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
 
+func set_card_type(title, desc):
+	$Title.text = title
+	$Desc.text = desc
+
+func get_title():
+	return $Title.text
+
 func _on_buy_pressed() -> void:
 	selected = !selected
+	if $Buy.button_pressed:
+		$Background.modulate = "#aaaaaa"
+		set_happening("Buying!")
+	else:
+		$Background.modulate = "#ffffff"
+		$HappeningLabel.visible = false
+		
+
+func set_happening(text):
+	$HappeningLabel.text = text
+	$HappeningLabel.visible = true

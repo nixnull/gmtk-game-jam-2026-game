@@ -9,11 +9,12 @@
 script = ExtResource("1_w0p2i")
 
 [node name="StartScreen" parent="." unique_id=281103666 instance=ExtResource("2_7a4el")]
-visible = false
 
 [node name="GameScreen" parent="." unique_id=1897006239 instance=ExtResource("3_7a4el")]
+visible = false
 
 [node name="FinalScreen" parent="." unique_id=934399850 instance=ExtResource("4_kwhh3")]
+visible = false
 
 [connection signal="start_game" from="StartScreen" to="." method="_on_start_screen_start_game"]
 [connection signal="game_over" from="GameScreen" to="." method="_on_game_screen_game_over"]

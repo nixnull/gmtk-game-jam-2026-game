@@ -40,9 +40,25 @@ text = "This is what the card does. It should be able to fit several words just 
 horizontal_alignment = 1
 
 [node name="Buy" type="Button" parent="." unique_id=1602056451]
+modulate = Color(1, 1, 1, 0)
 offset_left = -125.0
-offset_top = -176.0
-offset_right = 127.0
-offset_bottom = 177.0
+offset_top = -175.0
+offset_right = 125.0
+offset_bottom = 176.0
+theme_override_font_sizes/font_size = 30
+toggle_mode = true
+icon_alignment = 1
+vertical_icon_alignment = 2
+
+[node name="HappeningLabel" type="RichTextLabel" parent="." unique_id=1765024840]
+visible = false
+offset_left = -125.0
+offset_top = -216.0
+offset_right = 125.0
+offset_bottom = -176.0
+theme_override_font_sizes/normal_font_size = 28
+text = "Buying!"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="pressed" from="Buy" to="." method="_on_buy_pressed"]

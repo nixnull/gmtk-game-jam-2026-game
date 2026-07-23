@@ -2,12 +2,18 @@
 
 [ext_resource type="PackedScene" uid="uid://dt3217l4kq7j4" path="res://bank.tscn" id="1_t5odh"]
 [ext_resource type="Script" uid="uid://bagkmk37aneck" path="res://game_screen.gd" id="1_xwjjp"]
+[ext_resource type="PackedScene" uid="uid://e0knnc7cu0fm" path="res://inventory.tscn" id="3_norob"]
 
 [node name="GameScreen" type="CanvasLayer" unique_id=1156669678]
 script = ExtResource("1_xwjjp")
 
 [node name="Bank" parent="." unique_id=728236113 instance=ExtResource("1_t5odh")]
 position = Vector2(576, 288)
+scale = Vector2(0.5, 0.5)
+
+[node name="Inventory" parent="." unique_id=1844453016 instance=ExtResource("3_norob")]
+position = Vector2(576, 576)
+scale = Vector2(0.5, 0.5)
 
 [node name="Buy" type="Button" parent="." unique_id=1356302608]
 anchors_preset = 7
@@ -16,11 +22,12 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -64.0
-offset_top = -53.0
+offset_top = -520.0
 offset_right = 64.0
+offset_bottom = -467.0
 grow_horizontal = 2
 grow_vertical = 0
-text = "Next"
+text = "Count Down"
 
 [node name="TurnsLeft" type="RichTextLabel" parent="." unique_id=1399436399]
 anchors_preset = 5
