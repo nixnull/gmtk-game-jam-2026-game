@@ -1,19 +1,35 @@
 extends Node
 
 var card_types = {
+	"One for Ones": {
+		"Desc": "Gain 1 point whenever the turn countdown is a multiple of one.",
+		"Cost": 1,
+		"Function": proc_timer_multiple, "Parameters": [fmod,1,1]
+	},
+	"Two for Twos": {
+		"Desc": "Gain 2 points whenever the turn countdown is a multiple of two.",
+		"Cost": 1,
+		"Function": proc_timer_multiple, "Parameters": [fmod,2,2]
+	},
+	"Three for Threes": {
+		"Desc": "Gain 3 points whenever the turn countdown is a multiple of three.",
+		"Cost": 1,
+		"Function": proc_timer_multiple, "Parameters": [fmod,3,3]
+	},
 	"Five for Fives": {
 		"Desc": "Gain 5 points whenever the turn countdown is a multiple of five.",
 		"Cost": 1,
 		"Function": proc_timer_multiple, "Parameters": [fmod,5,5]
 	},
-	"One for Ones": {
-		"Desc": "Gain 1 point whenever the turn countdown is a multiple of one.",
+	"Seven for Sevens": {
+		"Desc": "Gain 7 points whenever the turn countdown is a multiple of seven.",
 		"Cost": 1,
-		"Function": proc_timer_multiple, "Parameters": [fmod,1,1]
-	}
+		"Function": proc_timer_multiple, "Parameters": [fmod,7,7]
+	},
+
 }
 
-var turns_left = 10
+var turns_left = 25
 var score = 0
 
 var owned_cards = {} #title: number
@@ -34,7 +50,7 @@ func start():
 	score = 0
 	$Score.text = "Score:\n" + str(score)
 	$Bank.new_hand(3)
-	turns_left = 10
+	turns_left = 25
 	owned_cards = {}
 	$Inventory.display_inventory(owned_cards)
 	update_turns(0)
@@ -78,6 +94,8 @@ func _on_buy_pressed() -> void:
 	$Inventory.display_inventory(owned_cards)
 	
 	$Score.text = "Score:\n" + str(score)
+	
+	print("Ok, ", turns_left, " turns left...")
 
 func proc_timer_multiple(parameters):
 	var proc_condition = parameters[0]
