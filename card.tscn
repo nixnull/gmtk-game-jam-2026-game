@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bbxq81ibqj15q" path="res://card.gd" id="1_rjlel"]
 [ext_resource type="Texture2D" uid="uid://geemb3s8k8oq" path="res://assets/contracts/birch_contract.png" id="2_e484p"]
+[ext_resource type="Texture2D" uid="uid://diks800gfvqkn" path="res://assets/contracts/edel_contract.png" id="3_1i5pp"]
 [ext_resource type="AudioStream" uid="uid://bf5wxbonaesv3" path="res://assets/kenney sfx/handleSmallLeather.ogg" id="3_e484p"]
 [ext_resource type="Texture2D" uid="uid://cybpiofl7r2tn" path="res://assets/contracts/willow_contract.png" id="3_fpac0"]
 [ext_resource type="AudioStream" uid="uid://cpgtjymb5kypr" path="res://assets/kenney sfx/handleSmallLeather2.ogg" id="4_fpac0"]
@@ -18,10 +19,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("3_fpac0")
+"texture": ExtResource("3_1i5pp")
 }],
 "loop": 1,
-"name": &"special",
+"name": &"edelwood",
 "speed": 5.0
 }, {
 "frames": [{
@@ -38,7 +39,7 @@ script = ExtResource("1_rjlel")
 
 [node name="Background" type="AnimatedSprite2D" parent="." unique_id=963557881]
 sprite_frames = SubResource("SpriteFrames_elxoo")
-animation = &"special"
+animation = &"edelwood"
 
 [node name="Title" type="RichTextLabel" parent="." unique_id=21012014]
 offset_left = -118.0
@@ -46,7 +47,7 @@ offset_top = -167.0
 offset_right = 118.0
 offset_bottom = -104.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/normal_font_size = 30
+theme_override_font_sizes/normal_font_size = 25
 text = "Card Title"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -57,7 +58,7 @@ offset_top = -96.0
 offset_right = 109.0
 offset_bottom = 168.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/normal_font_size = 26
+theme_override_font_sizes/normal_font_size = 25
 text = "This is what the card does. It should be able to fit several words just fine. Blah."
 horizontal_alignment = 1
 

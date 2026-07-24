@@ -23,10 +23,10 @@ func draw_cards(cards_to_draw) -> void:
 	while i < cards_to_draw:
 		var card_inst = card_scene.instantiate()
 		var rand_card = card_types.keys()[randi() % card_types.size()]
+		
 		add_child(card_inst)
 		card_inst.set_card_info(rand_card, card_types[rand_card])
-		
-		card_inst.set_cost(card_types[rand_card]["Cost"])
+		card_inst.show_cost()
 		
 		drawn_cards.append(card_inst)
 		

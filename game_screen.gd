@@ -3,67 +3,78 @@ extends Node
 var card_types = {
 	"One for Ones": {
 		"Desc": "Gain $100 whenever years left is a multiple of one.",
-		"Cost": 1,
 		"Type": "birch",
-		"Function": proc_timer_multiple, "Parameters": [fmod,1,100]
+		"Cost": calcost_birch.bind(1),
+		"Proc": proc_on_timer_multiple.bind(1),
+		"Effect": update_score.bind(100)
 	},
 	"Two for Twos": {
 		"Desc": "Gain $200 whenever years left is a multiple of two.",
-		"Cost": 2,
 		"Type": "birch",
-		"Function": proc_timer_multiple, "Parameters": [fmod,2,200]
+		"Cost": calcost_birch.bind(2),
+		"Proc": proc_on_timer_multiple.bind(2),
+		"Effect": update_score.bind(200)
 	},
 	"Three for Threes": {
 		"Desc": "Gain $300 whenever years left is a multiple of three.",
-		"Cost": 3,
 		"Type": "birch",
-		"Function": proc_timer_multiple, "Parameters": [fmod,3,300]
+		"Cost": calcost_birch.bind(3),
+		"Proc": proc_on_timer_multiple.bind(3),
+		"Effect": update_score.bind(300)
 	},
 	"Five for Fives": {
 		"Desc": "Gain $500 whenever years left is a multiple of five.",
-		"Cost": 5,
 		"Type": "birch",
-		"Function": proc_timer_multiple, "Parameters": [fmod,5,500]
+		"Cost": calcost_birch.bind(5),
+		"Proc": proc_on_timer_multiple.bind(5),
+		"Effect": update_score.bind(500)
 	},
 	"Seven for Sevens": {
 		"Desc": "Gain $700 whenever years left is a multiple of seven.",
-		"Cost": 7,
 		"Type": "birch",
-		"Function": proc_timer_multiple, "Parameters": [fmod,7,700]
+		"Cost": calcost_birch.bind(7),
+		"Proc": proc_on_timer_multiple.bind(7),
+		"Effect": update_score.bind(700)
 	},
 	"Evens Demons": {
-		"Desc": "Gain $500 on even years, lose $250 on odd years.",
-		"Cost": 2,
+		"Desc": "Gain $500 on even years, lose $400 on odd years.",
 		"Type": "birch",
-		"Function": proc_on_even, "Parameters": [500,-250]
+		"Cost": calcost_birch.bind(2),
+		"Proc": proc_on_even,
+		"Effect": update_score.bind(500),
+		"Bad Proc": proc_on_odd,
+		"Bad Effect": update_score.bind(-400)
 	},
 	"Odds Gods": {
-		"Desc": "Gain $500 on odd years, lose $250 on even years.",
-		"Cost": 2,
+		"Desc": "Gain $500 on odd years, lose $400 on even years.",
 		"Type": "birch",
-		"Function": proc_on_odd, "Parameters": [500,-250]
+		"Cost": calcost_birch.bind(2),
+		"Proc": proc_on_odd,
+		"Effect": update_score.bind(500),
+		"Bad Proc": proc_on_even,
+		"Bad Effect": update_score.bind(-400)
 	},
-
 	"Prime Meridian": {
 		"Desc": "Gain the number of years left as money if the years left is prime.",
-		"Cost": 4,
-		"Type": "willow",
-		"Function": proc_is_prime, "Parameters": []
+		"Type": "birch",
+		"Cost": calcost_birch.bind(2),
+		"Proc": proc_is_prime,
+		"Effect": effect_prime_meridian
 	},
 
 	"Third Eye": {
 		"Desc": "Fae offer one more boon.",
-		"Cost": 4,
 		"Type": "willow",
-		"Function": proc_do_nothing, "Parameters": []
+		"Cost": calcost_thirdeye.bind()
 	},
 	
 		"Second Lease on Life": {
-		"Desc": "Trade in $1000 for 10 years back.",
-		"Cost": -10,
-		"Type": "willow",
-		"Function": proc_regain_years, "Parameters": [10000]
-	},
+		"Desc": "Double your debt (or halve your money) to buy a few more years.",
+		"Type": "edelwood",
+		"Cost": calcost_edelwood,
+		"Proc": proc_always,
+		"Effect": effect_edelwood,
+	}
 
 }
 
@@ -83,6 +94,7 @@ var BASE_HAND = 3
 func _ready() -> void:
 	$Bank.card_types = card_types
 	$Inventory.card_types = card_types
+	var test = proc_on_timer_multiple.bind(1)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -90,8 +102,7 @@ func _process(delta: float) -> void:
 	total_selected_cost = 0
 	
 	for card in selected_cards:
-		var card_title = card.get_title()
-		total_selected_cost += card_types[card_title]["Cost"]
+		total_selected_cost += card.get_cost()
 	
 	if selected_cards.is_empty():
 		$ScoreSubtractingLabel.set("theme_override_colors/default_color", Color(0.996, 0.0, 0.164, 1.0))
@@ -126,13 +137,23 @@ func stop():
 func update_turns(turns_lost):
 	turns_left -= turns_lost
 	$"TurnsLeft".text = "Years Remaining\n" + str(turns_left)
-	if turns_left <= 0:
-		game_over.emit(score)
 		
 	#Run Card functions
 	for card in owned_cards:
 		for i in range(owned_cards[card]):
-			card_types[card]["Function"].call(card_types[card]["Parameters"])
+			if "Proc" in card_types[card]:
+				print("Check for proc of " + card + "#" + str(i) + "...")
+				if card_types[card]["Proc"].call():
+					print("It procs!")
+					card_types[card]["Effect"].call()
+			if "Bad Proc" in card_types[card]:
+				print("Check for bad proc of " + card + "#" + str(i) + "...")
+				if card_types[card]["Bad Proc"].call():
+					print("It bad procs!")
+					card_types[card]["Bad Effect"].call()
+					
+	if turns_left <= 0:
+		game_over.emit(score)
 
 func update_score(amount, setting=false):
 	var valiance = ""
@@ -157,7 +178,7 @@ func _on_buy_pressed() -> void:
 	
 	for card in selected_cards:
 		var card_title = card.get_title()
-		total_cost += card_types[card_title]["Cost"]
+		total_cost += card.get_cost()
 		
 		if card_title in owned_cards:
 			owned_cards[card_title] += 1
@@ -180,7 +201,7 @@ func _on_buy_pressed() -> void:
 		
 		print("Ok, ", turns_left, " years left...")
 	
-func proc_is_prime(parameters):
+func proc_is_prime():
 	var number = turns_left
 	var is_prime = true
 	
@@ -193,38 +214,38 @@ func proc_is_prime(parameters):
 			if fmod(number, i) == 0:
 				is_prime = false
 	
-	print(number, " is prime? ", is_prime)
-	if is_prime:
-		update_score(turns_left)
+	return is_prime
 
-func proc_timer_multiple(parameters):
-	var proc_condition = parameters[0]
-	var proc_compare_to = parameters[1]
-	var reward = parameters[2]
+func proc_on_timer_multiple(number):
+	return fmod(turns_left, number) == 0
 	
-	print("Is ", turns_left, " a multiple of ", proc_compare_to, "?")
+func calcost_birch(cost):
+	return cost
+
+func calcost_thirdeye():
+	if "Third Eye" in owned_cards:
+		return owned_cards["Third Eye"] * 2
+	else:
+		return 1
+
+func calcost_edelwood():
+	return 5
+
+func proc_always():
+	return true
+
+func proc_on_even():
+	return fmod(turns_left, 2) == 0
+
+func proc_on_odd():
+	return not proc_on_even()
 	
-	if proc_condition.call(turns_left, proc_compare_to) == 0:
-		update_score(int(reward))
-		print("Yes!")
-	else:
-		print("No :(")
+func effect_prime_meridian():
+	return turns_left
 
-func proc_do_nothing(parameters):
-	pass
-
-func proc_on_even(parameters):
-	if fmod(turns_left, 2) == 0:
-		update_score(parameters[0])
+func effect_edelwood():
+	if score > 0:
+		update_score(-(score / 2))
 	else:
-		update_score(parameters[1])
-
-func proc_on_odd(parameters):
-	if fmod(turns_left, 2) != 0:
-		update_score(parameters[0])
-	else:
-		update_score(parameters[1])
-		
-func proc_regain_years(parameters):
-	update_score(-parameters[0])
+		update_score(score)
 	owned_cards.erase("Second Lease on Life")

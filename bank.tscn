@@ -2,7 +2,10 @@
 
 [ext_resource type="Script" uid="uid://dljqoi0ogfgfb" path="res://bank.gd" id="1_070a6"]
 
+[sub_resource type="SpriteFrames" id="SpriteFrames_whcv5"]
+
 [node name="Bank" type="Node2D" unique_id=728236113]
 script = ExtResource("1_070a6")
 
 [node name="Background" type="AnimatedSprite2D" parent="." unique_id=783255834]
+sprite_frames = SubResource("SpriteFrames_whcv5")
