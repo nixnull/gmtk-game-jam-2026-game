@@ -20,16 +20,17 @@ func display_inventory(owned_cards):
 		child.visible = false
 		child.queue_free()
 	inventory = []
+	print(owned_cards)
 	var card_count = owned_cards.size()
 	var this_one = 0
 	for card in owned_cards:
 		this_one += 1
 		var card_inst = card_scene.instantiate()
 		add_child(card_inst)
-		card_inst.set_card_type(card, card_types[card]["Desc"])
+		card_inst.set_card_info(card, card_types[card])
 		inventory.append(card_inst)
 		var x_pos = ((card_count / 2) - this_one) * 260
 		
 		card_inst.position.x += x_pos
 		
-		card_inst.set_happening(str(owned_cards[card]))
+		card_inst.set_count(str(owned_cards[card]))

@@ -24,7 +24,10 @@ func draw_cards(cards_to_draw) -> void:
 		var card_inst = card_scene.instantiate()
 		var rand_card = card_types.keys()[randi() % card_types.size()]
 		add_child(card_inst)
-		card_inst.set_card_type(rand_card, card_types[rand_card]["Desc"])
+		card_inst.set_card_info(rand_card, card_types[rand_card])
+		
+		card_inst.set_cost(card_types[rand_card]["Cost"])
+		
 		drawn_cards.append(card_inst)
 		
 		var x_pos = ((cards_to_draw / 2) - i) * 260
