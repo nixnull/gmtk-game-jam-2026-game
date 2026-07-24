@@ -10,9 +10,10 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	pass
 
-func set_card_type(title, desc):
+func set_card_info(title, card):
 	$Title.text = title
-	$Desc.text = desc
+	$Desc.text = card["Desc"]
+	$Background.play(str(card["Type"]))
 
 func get_title():
 	return $Title.text
@@ -28,7 +29,17 @@ func _on_buy_pressed() -> void:
 		$Background.modulate = "#ffffff"
 		$HappeningLabel.visible = false
 		
-
 func set_happening(text):
 	$HappeningLabel.text = text
 	$HappeningLabel.visible = true
+	
+func set_cost(cost):
+	var label_str = str(cost) + " year"
+	if cost not in [1,-1]:
+		label_str += "s"
+	$CostLabel.text = label_str
+	$CostLabel.visible = true
+	
+func set_count(count):
+	$CountLabel.text = str(count)
+	$CountLabel.visible = true
