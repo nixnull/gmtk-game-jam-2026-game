@@ -95,7 +95,15 @@ var card_types = {
 		"Cost": calcost_tradehalf,
 		"Proc": on_buy.bind("Live Fast, Die Young"),
 		"Score": effect_tradehalf
+	},
+	"Cryptid Currency": {
+		"Desc": "Double all your winnings, but triple all your losses",
+		"Type": "willow",
+		"Cost": calcost_birch.bind(10),
+		"Max": 1,
+		"End of Scoring Effect": effect_crypto
 	}
+	
 }
 
 var card_scene = load("res://card.tscn")
@@ -163,6 +171,7 @@ func stop():
 func update_turns(turns_lost):
 	var pending_scores = []
 	var turn_net_score = 0
+	var end_of_scoring_queue = []
 	
 	turns_left_before_procs = turns_left
 	turns_left -= turns_lost
@@ -192,7 +201,15 @@ func update_turns(turns_lost):
 						pending_value = card_types[card]["Penalty"].call()
 					else:
 						pending_value = card_types[card].get("Penalty",0)
+			if "End of Scoring Effect" in card_types[card]:
+				end_of_scoring_queue.append(card_types[card]["End of Scoring Effect"])
 			pending_scores.append(pending_value)
+	
+	if len(end_of_scoring_queue) > 0:
+		print("end of scoring routine start")
+		for effect in end_of_scoring_queue:
+			print("executing routine")
+			pending_scores = effect.call(pending_scores)
 	
 	turn_net_score = pending_scores.reduce(func(sum,val): return sum + val, 0)
 	update_score(turn_net_score)
@@ -323,3 +340,14 @@ func on_buy(proc_card_name):
 			var bought_card_index = selected_cards.find(bought_card_packed[1])
 			selected_cards.pop_at(bought_card_index)
 			return true
+
+func effect_crypto(score_list):
+	var new_scores = []
+	print("modifying scores")
+	for initial_score in score_list:
+		if initial_score > 0:
+			new_scores.append(initial_score * 2)
+		elif 0 > initial_score:
+			new_scores.append(initial_score * 3)
+	print(score_list)
+	return new_scores
