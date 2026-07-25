@@ -82,7 +82,7 @@ func show_score(score):
 		txt += "-"
 	else:
 		$ScoreLabel.set("modulate", Color(0.134, 0.123, 1.0, 1.0))
-		txt = "Negated"
+		txt = "Negated" # this will never appear bc the score isn't actually passed in if it's deleted
 	txt += str(score)
 	$ScoreLabel.text = txt
 	$ScoreLabel.show()

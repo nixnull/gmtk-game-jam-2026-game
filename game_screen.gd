@@ -118,7 +118,15 @@ var card_types = {
 		"Max": 1,
 		"End of Scoring Effect": effect_wings,
 		"Tags": ["Organ"]
-	}
+	},
+	"Monkey's Paw": {
+		"Desc": "Each turn, if less than 2 types of cards would score, they score twice.",
+		"Type": "willow",
+		"Cost": calcost_birch.bind(8),
+		"Max": 1,
+		"End of Scoring Effect": effect_monkey_paw,
+		"Tags": ["Organ"]
+		}
 	
 }
 
@@ -396,3 +404,15 @@ func effect_wings(wings_card_scores):
 			break
 	return wings_card_scores
 		
+func effect_monkey_paw(paw_card_scores):
+	var positive_triggers = 0
+	for card in paw_card_scores:
+		if paw_card_scores[card] > 0:
+			positive_triggers += 1
+	if positive_triggers < 3:
+		for card in paw_card_scores:
+			if paw_card_scores[card] > 0:
+				paw_card_scores[card] *= 2
+	else:
+		$PlacementControl/Inventory.animate_negated_card("Monkey\'s Paw")
+	return paw_card_scores
