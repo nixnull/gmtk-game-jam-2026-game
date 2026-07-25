@@ -57,9 +57,16 @@ var card_types = {
 	"Prime Meridian": {
 		"Desc": "Gain the number of years left as money if the years left is prime.",
 		"Type": "birch",
-		"Cost": calcost_birch.bind(2),
+		"Cost": calcost_birch.bind(3),
 		"Proc": proc_is_prime,
 		"Boon": effect_prime_meridian
+	},
+	"Perfect Squares": {
+		"Desc": "Gain the number of years left as money if the years left is a perfect square.",
+		"Type": "birch",
+		"Cost": calcost_birch.bind(3),
+		"Proc": proc_on_perfect_square,
+		"Boon": effect_square_root_score
 	},
 	"Joker": {
 		"Desc": "Gain $500 on funny numbered years.",
@@ -310,7 +317,7 @@ func proc_on_odd():
 	return not proc_on_even()
 	
 func effect_prime_meridian():
-	return {"Score": turns_left}
+	return {"Score": turns_left * 100}
 
 func effect_edelwood():
 	return {"Score": -100}
@@ -359,3 +366,9 @@ func effect_crypto(card_score_changes):
 	
 func effect_flat_score_change(score_change):
 	return {"Score": score_change}
+	
+func proc_on_perfect_square():
+	return fmod(sqrt(turns_left), 2) == 0
+
+func effect_square_root_score():
+	return {"Score": turns_left * 100}

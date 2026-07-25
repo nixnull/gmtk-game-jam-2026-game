@@ -9,28 +9,21 @@
 script = ExtResource("1_xwjjp")
 
 [node name="Buy" type="Button" parent="." unique_id=1356302608]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -64.0
-offset_top = -448.0
-offset_right = 64.0
-offset_bottom = -395.0
-grow_horizontal = 2
-grow_vertical = 0
-text = "Accept Bargain"
-
-[node name="TurnsLeft" type="RichTextLabel" parent="." unique_id=1399436399]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -160.0
-offset_top = 64.0
-offset_right = 159.0
-offset_bottom = 148.0
+offset_left = -64.0
+offset_top = 144.0
+offset_right = 64.0
+offset_bottom = 197.0
 grow_horizontal = 2
+text = "Accept Bargain"
+
+[node name="TurnsLeft" type="RichTextLabel" parent="." unique_id=1399436399]
+offset_left = 64.0
+offset_top = 64.0
+offset_right = 383.0
+offset_bottom = 148.0
 theme_override_font_sizes/normal_font_size = 30
 text = "Turns Remaining
 100"
@@ -39,13 +32,14 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="ScoreSubtractingLabel" type="RichTextLabel" parent="." unique_id=352834983]
+visible = false
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -208.0
-offset_top = 148.0
-offset_right = 208.0
-offset_bottom = 188.0
+offset_left = -560.0
+offset_top = 152.0
+offset_right = -144.0
+offset_bottom = 192.0
 grow_horizontal = 2
 theme_override_colors/default_color = Color(1, 0.15686275, 0.53333336, 1)
 theme_override_font_sizes/normal_font_size = 28
@@ -84,10 +78,10 @@ grow_horizontal = 2
 [node name="Refresh" type="Button" parent="PlacementControl" unique_id=1962541609]
 visible = false
 layout_mode = 0
-offset_left = 117.0
-offset_top = 200.0
-offset_right = 183.0
-offset_bottom = 254.0
+offset_left = 116.0
+offset_top = 144.0
+offset_right = 182.0
+offset_bottom = 198.0
 text = "Drink
 Potion"
 
@@ -96,7 +90,7 @@ position = Vector2(20, 576)
 scale = Vector2(0.5, 0.5)
 
 [node name="Bank" parent="PlacementControl" unique_id=728236113 instance=ExtResource("1_t5odh")]
-position = Vector2(20, 384)
+position = Vector2(20, 320)
 scale = Vector2(0.5, 0.5)
 
 [connection signal="pressed" from="Buy" to="." method="_on_buy_pressed"]
