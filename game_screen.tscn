@@ -8,14 +8,6 @@
 [node name="GameScreen" type="CanvasLayer" unique_id=1156669678]
 script = ExtResource("1_xwjjp")
 
-[node name="Bank" parent="." unique_id=728236113 instance=ExtResource("1_t5odh")]
-position = Vector2(576, 360)
-scale = Vector2(0.5, 0.5)
-
-[node name="Inventory" parent="." unique_id=1844453016 instance=ExtResource("3_norob")]
-position = Vector2(576, 576)
-scale = Vector2(0.5, 0.5)
-
 [node name="Buy" type="Button" parent="." unique_id=1356302608]
 anchors_preset = 7
 anchor_left = 0.5
@@ -75,14 +67,33 @@ vertical_alignment = 1
 [node name="BuyAudio" type="AudioStreamPlayer" parent="." unique_id=1338669406]
 stream = ExtResource("4_yla3h")
 
-[node name="Refresh" type="Button" parent="." unique_id=1962541609]
+[node name="PlacementControl" type="Control" parent="." unique_id=507354622]
+layout_mode = 3
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 40.0
+grow_horizontal = 2
+
+[node name="Refresh" type="Button" parent="PlacementControl" unique_id=1962541609]
 visible = false
-offset_left = 673.0
+layout_mode = 0
+offset_left = 117.0
 offset_top = 200.0
-offset_right = 739.0
-offset_bottom = 253.0
+offset_right = 183.0
+offset_bottom = 254.0
 text = "Drink
 Potion"
 
+[node name="Inventory" parent="PlacementControl" unique_id=1844453016 instance=ExtResource("3_norob")]
+position = Vector2(20, 576)
+scale = Vector2(0.5, 0.5)
+
+[node name="Bank" parent="PlacementControl" unique_id=728236113 instance=ExtResource("1_t5odh")]
+position = Vector2(20, 384)
+scale = Vector2(0.5, 0.5)
+
 [connection signal="pressed" from="Buy" to="." method="_on_buy_pressed"]
-[connection signal="pressed" from="Refresh" to="." method="_on_refresh_pressed"]
+[connection signal="pressed" from="PlacementControl/Refresh" to="." method="_on_refresh_pressed"]

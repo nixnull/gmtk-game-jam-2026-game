@@ -365,9 +365,9 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Desc" type="RichTextLabel" parent="." unique_id=1668916166]
-offset_left = -109.0
-offset_top = -96.0
-offset_right = 109.0
+offset_left = -118.0
+offset_top = -72.0
+offset_right = 118.0
 offset_bottom = 168.0
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/normal_font_size = 25
@@ -402,6 +402,7 @@ offset_top = -216.0
 offset_right = 125.0
 offset_bottom = -176.0
 theme_override_font_sizes/normal_font_size = 28
+text = "1000"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -424,6 +425,17 @@ stream = ExtResource("4_fpac0")
 
 [node name="AnimationTimer" type="Timer" parent="." unique_id=1129978330]
 one_shot = true
+
+[node name="ScoreLabel" type="RichTextLabel" parent="." unique_id=1595533819]
+visible = false
+offset_left = -128.0
+offset_top = -112.0
+offset_right = 128.0
+offset_bottom = -72.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/normal_font_size = 32
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="pressed" from="Buy" to="." method="_on_buy_pressed"]
 [connection signal="timeout" from="AnimationTimer" to="." method="_on_animation_timer_timeout"]

@@ -6,67 +6,67 @@ var card_types = {
 		"Type": "birch",
 		"Cost": calcost_birch.bind(2),
 		"Proc": proc_on_timer_multiple.bind(1),
-		"Score": 100
+		"Boon": effect_flat_score_change.bind(100)
 	},
 	"Two for Twos": {
 		"Desc": "Gain $200 whenever years left is a multiple of two.",
 		"Type": "birch",
 		"Cost": calcost_birch.bind(2),
 		"Proc": proc_on_timer_multiple.bind(2),
-		"Score": 200
+		"Boon": effect_flat_score_change.bind(200)
 	},
 	"Three for Threes": {
 		"Desc": "Gain $300 whenever years left is a multiple of three.",
 		"Type": "birch",
 		"Cost": calcost_birch.bind(1),
 		"Proc": proc_on_timer_multiple.bind(3),
-		"Score": 300
+		"Boon": effect_flat_score_change.bind(300)
 	},
 	"Five for Fives": {
 		"Desc": "Gain $500 whenever years left is a multiple of five.",
 		"Type": "birch",
 		"Cost": calcost_birch.bind(1),
 		"Proc": proc_on_timer_multiple.bind(5),
-		"Score": 500
+		"Boon": effect_flat_score_change.bind(500)
 	},
 	"Seven for Sevens": {
 		"Desc": "Gain $700 whenever years left is a multiple of seven.",
 		"Type": "birch",
 		"Cost": calcost_birch.bind(1),
 		"Proc": proc_on_timer_multiple.bind(7),
-		"Score": 700
+		"Boon": effect_flat_score_change.bind(700)
 	},
 	"Evens Demons": {
 		"Desc": "Gain $500 on even years, lose $400 on odd years.",
 		"Type": "birch",
 		"Cost": calcost_birch.bind(2),
 		"Proc": proc_on_even,
-		"Score": 500,
+		"Boon": effect_flat_score_change.bind(500),
 		"Bad Proc": proc_on_odd,
-		"Penalty": -400
+		"Penalty": effect_flat_score_change.bind(-400)
 	},
 	"Odds Gods": {
 		"Desc": "Gain $500 on odd years, lose $400 on even years.",
 		"Type": "birch",
 		"Cost": calcost_birch.bind(2),
 		"Proc": proc_on_odd,
-		"Score": 500,
+		"Boon": effect_flat_score_change.bind(500),
 		"Bad Proc": proc_on_even,
-		"Penalty": -400
+		"Penalty": effect_flat_score_change.bind(-400)
 	},
 	"Prime Meridian": {
 		"Desc": "Gain the number of years left as money if the years left is prime.",
 		"Type": "birch",
 		"Cost": calcost_birch.bind(2),
 		"Proc": proc_is_prime,
-		"Score": effect_prime_meridian
+		"Boon": effect_prime_meridian
 	},
 	"Joker": {
 		"Desc": "Gain $500 on funny numbered years.",
 		"Type": "birch",
 		"Cost": calcost_birch.bind(1),
 		"Proc": proc_funny_number,
-		"Score": 500
+		"Boon": effect_flat_score_change.bind(500)
 	},
 
 	"Third Eye": {
@@ -94,7 +94,7 @@ var card_types = {
 		"Type": "birch",
 		"Cost": calcost_tradehalf,
 		"Proc": on_buy.bind("Live Fast, Die Young"),
-		"Score": effect_tradehalf
+		"Boon": effect_tradehalf
 	},
 	"Cryptid Currency": {
 		"Desc": "Double all your winnings, but triple all your losses",
@@ -125,14 +125,14 @@ var drawn_cards = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	$Bank.card_types = card_types
-	$Inventory.card_types = card_types
-	var test = proc_on_timer_multiple.bind(1)
+	$PlacementControl/Bank.card_types = card_types
+	$PlacementControl/Inventory.card_types = card_types
+	#var test = proc_on_timer_multiple.bind(1)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	
-	selected_cards = $Bank.report_selected()
+	selected_cards = $PlacementControl/Bank.report_selected()
 	total_selected_cost = 0
 	
 	for card in selected_cards:
@@ -161,9 +161,10 @@ func start():
 	update_score(-200000, true)
 	turns_left = 50
 	owned_cards = {}
-	$Bank.draw_cards(BASE_HAND, owned_cards)
-	$Inventory.display_inventory(owned_cards)
+	$PlacementControl/Bank.draw_cards(BASE_HAND, owned_cards)
+	$PlacementControl/Inventory.display_inventory(owned_cards)
 	update_turns(0)
+	$PlacementControl/Refresh.hide()
 	
 func stop():
 	self.visible = false
@@ -180,38 +181,44 @@ func update_turns(turns_lost):
 	print("Ok, ", turns_left, " years left...")
 	
 	#Run Card functions
+	var card_score_changes = {}
 	for card in owned_cards:
 		for i in range(owned_cards[card]):
-			var pending_value = 0
 			if "Proc" in card_types[card]:
 				print("Check for proc of " + card + "#" + str(i) + "...")
 				if card_types[card]["Proc"].call():
 					print("It procs!")
-					$Inventory.animate_card(card, false)
-					if card_types[card].get("Score",0) is Callable:
-						pending_value = card_types[card]["Score"].call()
+					$PlacementControl/Inventory.animate_card(card, false)
+					var effects = card_types[card]["Boon"].call()
+					if card in card_score_changes:
+						card_score_changes[card] += effects["Score"]
 					else:
-						pending_value = card_types[card].get("Score",0)
+						card_score_changes[card] = effects["Score"]
 			if "Bad Proc" in card_types[card]:
 				print("Check for bad proc of " + card + "#" + str(i) + "...")
 				if card_types[card]["Bad Proc"].call():
 					print("It bad procs!")
-					$Inventory.animate_card(card, true)
-					if card_types[card].get("Penalty",0) is Callable:
-						pending_value = card_types[card]["Penalty"].call()
+					$PlacementControl/Inventory.animate_card(card, true)
+					var effects = card_types[card]["Penalty"].call()
+					if card in card_score_changes:
+						card_score_changes[card] += effects["Score"]
 					else:
-						pending_value = card_types[card].get("Penalty",0)
+						card_score_changes[card] = effects["Score"]
 			if "End of Scoring Effect" in card_types[card]:
+				$PlacementControl/Inventory.animate_card(card, false)
 				end_of_scoring_queue.append(card_types[card]["End of Scoring Effect"])
-			pending_scores.append(pending_value)
 	
 	if len(end_of_scoring_queue) > 0:
 		print("end of scoring routine start")
 		for effect in end_of_scoring_queue:
 			print("executing routine")
-			pending_scores = effect.call(pending_scores)
-	
-	turn_net_score = pending_scores.reduce(func(sum,val): return sum + val, 0)
+			card_score_changes = effect.call(card_score_changes)
+			
+	#Apply scores
+	for card in card_score_changes:
+		$PlacementControl/Inventory.show_card_score(card, card_score_changes[card])
+		turn_net_score += card_score_changes[card]
+		
 	update_score(turn_net_score)
 	
 	if turns_left <= 0:
@@ -233,8 +240,7 @@ func update_score(amount, setting=false):
 	$Score.text = valiance + "\n$" + str(score)
 	
 func _on_buy_pressed() -> void:
-	var selected_cards = []
-	selected_cards = $Bank.report_selected()
+	selected_cards = $PlacementControl/Bank.report_selected()
 	
 	var total_cost = 0
 	
@@ -247,16 +253,16 @@ func _on_buy_pressed() -> void:
 		else:
 			owned_cards[card_title] = 1
 			if card_title == "Refreshing Potion":
-				$Refresh.show()
+				$PlacementControl/Refresh.show()
 	
 	if selected_cards.is_empty():
 		print("empty")
 	else:
 		$BuyAudio.play()
-		$Inventory.display_inventory(owned_cards)
+		$PlacementControl/Inventory.display_inventory(owned_cards)
 		update_turns(total_cost)
 		var to_draw = BASE_HAND + owned_cards.get("Third Eye",0)
-		$Bank.draw_cards(to_draw, owned_cards)
+		$PlacementControl/Bank.draw_cards(to_draw, owned_cards)
 	
 func proc_is_prime():
 	var number = turns_left
@@ -277,7 +283,7 @@ func proc_on_timer_multiple(number):
 	return fmod(turns_left, number) == 0
 	
 func proc_funny_number():
-	return turns_left in [7, 13, 69, 420]
+	return turns_left in [7, 13, 21, 67, 69, 420]
 	
 func calcost_birch(cost):
 	return cost
@@ -304,14 +310,15 @@ func proc_on_odd():
 	return not proc_on_even()
 	
 func effect_prime_meridian():
-	return turns_left
+	return {"Score": turns_left}
 
 func effect_edelwood():
-	return -100
+	return {"Score": -100}
 	
 func effect_potion():
 	var to_draw = BASE_HAND + owned_cards.get("Third Eye",0)
-	$Bank.draw_cards(to_draw, owned_cards)
+	$PlacementControl/Bank.draw_cards(to_draw, owned_cards)
+	return {"Score": 0}
 
 func _on_refresh_pressed() -> void:
 	effect_potion()
@@ -320,13 +327,13 @@ func _on_refresh_pressed() -> void:
 	else:
 		owned_cards.erase("Refreshing Potion")
 		
-		$Refresh.hide()
-	$Inventory.display_inventory(owned_cards)
+		$PlacementControl/Refresh.hide()
+	$PlacementControl/Inventory.display_inventory(owned_cards)
 
 func effect_tradehalf():
 	var half_turns_left = int(round(turns_left_before_procs * 0.5))
 	var tradehalf_big_money = half_turns_left * 1000
-	return tradehalf_big_money
+	return {"Score": tradehalf_big_money}
 	
 func calcost_tradehalf():
 	return int(round(turns_left * 0.5))
@@ -341,13 +348,14 @@ func on_buy(proc_card_name):
 			selected_cards.pop_at(bought_card_index)
 			return true
 
-func effect_crypto(score_list):
-	var new_scores = []
-	print("modifying scores")
-	for initial_score in score_list:
-		if initial_score > 0:
-			new_scores.append(initial_score * 2)
-		elif 0 > initial_score:
-			new_scores.append(initial_score * 3)
-	print(score_list)
-	return new_scores
+func effect_crypto(card_score_changes):
+	for card in card_score_changes:
+		var value = card_score_changes[card]
+		if value > 0:
+			card_score_changes[card] = value * 2
+		else:
+			card_score_changes[card] = value * 3
+	return card_score_changes
+	
+func effect_flat_score_change(score_change):
+	return {"Score": score_change}

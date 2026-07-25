@@ -40,3 +40,6 @@ func display_inventory(owned_cards):
 		
 func animate_card(card, bad = false):
 	inventory[card].play_animation(bad)
+	
+func show_card_score(card, score):
+	inventory[card].show_score(score)

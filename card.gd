@@ -64,6 +64,18 @@ func play_animation(bad = false):
 	print("Start the timer")
 	$Background/ActivationAnimation.play()
 
+func show_score(score):
+	var txt = ""
+	if score >= 0:
+		$ScoreLabel.set("modulate", Color(0.0, 1.0, 0.0, 1.0))
+		txt += "+"
+	else:
+		$ScoreLabel.set("modulate", Color(1.0, 0.0, 0.0, 1.0))
+		txt += "-"
+	txt += str(score)
+	$ScoreLabel.text = txt
+	$ScoreLabel.show()
 
 func _on_animation_timer_timeout() -> void:
 	$Background/ActivationAnimation.stop()
+	$ScoreLabel.hide()
