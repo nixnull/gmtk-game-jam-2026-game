@@ -8,6 +8,7 @@
 [ext_resource type="AudioStream" uid="uid://tai6dofasyms" path="res://assets/music/Business As Unusual.wav" id="6_sjiej"]
 [ext_resource type="Script" uid="uid://du0fmi150jeky" path="res://intro_bgm.gd" id="7_4sv2p"]
 [ext_resource type="AudioStream" uid="uid://o0m2lgijlsco" path="res://assets/music/Business As Unusual (loop).wav" id="8_0osx7"]
+[ext_resource type="Script" uid="uid://mvnfcdyvcsbv" path="res://loop_bgm.gd" id="9_4sv2p"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_elxoo"]
 animations = [{
@@ -42,8 +43,10 @@ script = ExtResource("7_4sv2p")
 
 [node name="LoopBGM" type="AudioStreamPlayer" parent="IntroBGM" unique_id=1263080052]
 stream = ExtResource("8_0osx7")
+script = ExtResource("9_4sv2p")
 
 [connection signal="start_game" from="StartScreen" to="." method="_on_start_screen_start_game"]
 [connection signal="game_over" from="GameScreen" to="." method="_on_game_screen_game_over"]
 [connection signal="restart" from="FinalScreen" to="." method="_on_final_screen_restart"]
 [connection signal="finished" from="IntroBGM" to="IntroBGM" method="_on_finished"]
+[connection signal="finished" from="IntroBGM" to="IntroBGM/LoopBGM" method="_on_intro_bgm_finished"]
