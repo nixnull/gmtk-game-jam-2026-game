@@ -59,7 +59,7 @@ var card_types = {
 		"Type": "birch",
 		"Cost": calcost_birch.bind(2),
 		"Proc": proc_is_prime,
-		"Score Calc": effect_prime_meridian
+		"Score": effect_prime_meridian
 	},
 	"Joker": {
 		"Desc": "Gain $500 on funny numbered years.",
@@ -80,7 +80,7 @@ var card_types = {
 		"Type": "edelwood",
 		"Cost": calcost_birch.bind(-10),
 		"Bad Proc": proc_always,
-		"Penalty Calc": effect_edelwood,
+		"Penalty": effect_edelwood,
 		"Max": 10
 	},
 	"Refreshing Potion": {
@@ -94,7 +94,7 @@ var card_types = {
 		"Type": "birch",
 		"Cost": calcost_tradehalf,
 		"Proc": on_buy.bind("Live Fast, Die Young"),
-		"Score Calc": effect_tradehalf
+		"Score": effect_tradehalf
 	}
 }
 
@@ -179,8 +179,8 @@ func update_turns(turns_lost):
 				if card_types[card]["Proc"].call():
 					print("It procs!")
 					$Inventory.animate_card(card, false)
-					if card_types[card].get("Score Calc",0) is Callable:
-						pending_value = card_types[card]["Score Calc"].call()
+					if card_types[card].get("Score",0) is Callable:
+						pending_value = card_types[card]["Score"].call()
 					else:
 						pending_value = card_types[card].get("Score",0)
 			if "Bad Proc" in card_types[card]:
@@ -188,8 +188,8 @@ func update_turns(turns_lost):
 				if card_types[card]["Bad Proc"].call():
 					print("It bad procs!")
 					$Inventory.animate_card(card, true)
-					if card_types[card].get("Penalty Calc",0) is Callable:
-						pending_value = card_types[card]["Penalty Calc"].call()
+					if card_types[card].get("Penalty",0) is Callable:
+						pending_value = card_types[card]["Penalty"].call()
 					else:
 						pending_value = card_types[card].get("Penalty",0)
 			pending_scores.append(pending_value)
