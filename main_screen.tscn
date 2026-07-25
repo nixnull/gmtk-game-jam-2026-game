@@ -45,7 +45,8 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Background" type="Sprite2D" parent="Control" unique_id=1543305039]
-position = Vector2(20, 19.999998)
+position = Vector2(19.999958, 19.999992)
+scale = Vector2(0.9999999, 1)
 texture = ExtResource("2_4sclt")
 
 [connection signal="start_game" from="StartScreen" to="." method="_on_start_screen_start_game"]

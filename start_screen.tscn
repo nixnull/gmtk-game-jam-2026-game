@@ -11,9 +11,8 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -184.0
-offset_top = 24.0
 offset_right = 182.0
-offset_bottom = 152.0
+offset_bottom = 128.0
 grow_horizontal = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -23,14 +22,17 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Credits" type="RichTextLabel" parent="." unique_id=1709521791]
-anchors_preset = 1
+anchors_preset = 3
 anchor_left = 1.0
+anchor_top = 1.0
 anchor_right = 1.0
-offset_left = -512.0
-offset_top = 136.0
-offset_right = -40.0
-offset_bottom = 576.0
+anchor_bottom = 1.0
+offset_left = -535.0
+offset_top = -512.0
+offset_right = -63.0
+offset_bottom = -72.0
 grow_horizontal = 0
+grow_vertical = 0
 theme_override_font_sizes/normal_font_size = 28
 text = "Made for GMTK Game Jam 2026
 
@@ -47,14 +49,17 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Button" type="Button" parent="." unique_id=86969909]
-anchors_preset = 5
+anchors_preset = 8
 anchor_left = 0.5
+anchor_top = 0.5
 anchor_right = 0.5
-offset_left = -40.0
-offset_top = 512.0
-offset_right = 41.0
-offset_bottom = 565.0
+anchor_bottom = 0.5
+offset_left = -40.5
+offset_top = -26.5
+offset_right = 40.5
+offset_bottom = 26.5
 grow_horizontal = 2
+grow_vertical = 2
 theme_override_font_sizes/font_size = 32
 text = "Play!"
 
@@ -62,10 +67,14 @@ text = "Play!"
 stream = ExtResource("2_pevhg")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=359517470]
-offset_left = 80.0
-offset_top = 128.0
-offset_right = 528.0
-offset_bottom = 584.0
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 64.0
+offset_top = -520.0
+offset_right = 512.0
+offset_bottom = -72.0
+grow_vertical = 0
 theme_override_font_sizes/normal_font_size = 25
 text = "You owe a great debt to Down, Count of the Fae Kingdom. If you do not pay before the end of your life, you will spend afterlife indebted to him.
 

@@ -7,6 +7,8 @@ var card_types
 
 var card_scene = load("res://card.tscn")
 
+var card_size = 250
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass
@@ -48,7 +50,12 @@ func draw_cards(draw_count, inventory) -> void:
 		drawn_counts[rand_card] = drawn_counts.get(rand_card,0) + 1
 		
 		drawn_cards.append(card_inst)
-		var x_pos = ((draw_count / 2) - i) * 260
+		
+		var x_pos
+		if fmod(draw_count, 2) == 0:
+			x_pos = ((draw_count / 2) - i - .5) * (card_size + 10)
+		else:
+			x_pos = ((draw_count / 2) - i) * (card_size + 10)
 		
 		drawn_cards[i].position.x += x_pos
 		i+=1
