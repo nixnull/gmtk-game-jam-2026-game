@@ -75,7 +75,6 @@ var card_types = {
 		"Cost": calcost_thirdeye.bind(),
 		"Max": 4
 	},
-	
 	"Second Lease on Life": {
 		"Desc": "Buy some years, and pay for it every year after.",
 		"Type": "edelwood",
@@ -84,14 +83,19 @@ var card_types = {
 		"Bad Effect": effect_edelwood,
 		"Max": 10
 	},
-	
 	"Refreshing Potion": {
 		"Desc": "Refreshes your palate, and your store.",
 		"Type": "willow",
 		"Cost": calcost_birch.bind(3),
 		"Max": 3
+	},
+	"Live Fast, Die Young": {
+		"Desc": "Trade half your remaining lives for $1000 each",
+		"Type": "birch",
+		"Cost": calcost_tradehalf,
+		"Proc": on_buy.bind("Live Fast, Die Young"),
+		"Effect": effect_tradehalf
 	}
-
 }
 
 
@@ -106,6 +110,7 @@ signal game_over
 
 var selected_cards = []
 var total_selected_cost = 0
+var turns_left_before_procs = 0
 
 var BASE_HAND = 3
 
@@ -157,6 +162,7 @@ func stop():
 	self.visible = false
 	
 func update_turns(turns_lost):
+	turns_left_before_procs = turns_left
 	turns_left -= turns_lost
 	$"TurnsLeft".text = "Years Remaining\n" + str(turns_left)
 		
@@ -283,5 +289,27 @@ func _on_refresh_pressed() -> void:
 		owned_cards["Refreshing Potion"] -= 1
 	else:
 		owned_cards.erase("Refreshing Potion")
+		
 		$Refresh.hide()
 		$Inventory.display_inventory(owned_cards)
+
+func effect_tradehalf():
+	var half_turns_left = int(round(turns_left_before_procs * 0.5))
+	var tradehalf_big_money = half_turns_left * 1000
+	update_score(tradehalf_big_money)
+	
+func calcost_tradehalf():
+	return int(round(turns_left * 0.5))
+	
+func on_buy(proc_card_name):
+	var bought_card_titles = []
+	for bought_card in selected_cards:
+		bought_card_titles.append([bought_card.get_title(),bought_card])
+	for bought_card_packed in bought_card_titles:
+		if proc_card_name == bought_card_packed[0]:
+			var bought_card_index = selected_cards.find(bought_card_packed[1])
+			selected_cards.pop_at(bought_card_index)
+			return true
+		
+	
+		
