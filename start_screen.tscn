@@ -23,17 +23,14 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Credits" type="RichTextLabel" parent="." unique_id=1709521791]
-anchors_preset = -1
-anchor_left = 0.5503472
-anchor_top = 0.29629636
-anchor_right = 0.9375
-anchor_bottom = 1.0
-offset_left = -10.0
-offset_top = -72.000046
-offset_right = -10.0
-offset_bottom = -72.0
-grow_horizontal = 2
-grow_vertical = 0
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -512.0
+offset_top = 136.0
+offset_right = -40.0
+offset_bottom = 576.0
+grow_horizontal = 0
 theme_override_font_sizes/normal_font_size = 28
 text = "Made for GMTK Game Jam 2026
 
@@ -48,20 +45,18 @@ SFX from Kenney.nl
 Thanks for playing!"
 horizontal_alignment = 1
 vertical_alignment = 1
-metadata/_edit_use_anchors_ = true
 
 [node name="Button" type="Button" parent="." unique_id=86969909]
-anchors_preset = -1
-anchor_left = 0.47916666
-anchor_top = 0.37037036
-anchor_right = 0.5182292
-anchor_bottom = 0.41820988
-offset_top = 1.5258789e-05
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -40.0
+offset_top = 512.0
+offset_right = 41.0
+offset_bottom = 565.0
 grow_horizontal = 2
-grow_vertical = 2
 theme_override_font_sizes/font_size = 32
 text = "Play!"
-metadata/_edit_use_anchors_ = true
 
 [node name="StartSFX" type="AudioStreamPlayer" parent="." unique_id=340868847]
 stream = ExtResource("2_pevhg")
