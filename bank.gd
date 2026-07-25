@@ -15,26 +15,48 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	pass
 
-func draw_cards(cards_to_draw) -> void:
+func draw_cards(draw_count, inventory) -> void:
+	for child in drawn_cards:
+		child.queue_free()
 	drawn_cards = []
-	
-	var i = 0
-	
-	while i < cards_to_draw:
-		var card_inst = card_scene.instantiate()
-		var rand_card = card_types.keys()[randi() % card_types.size()]
 		
+	var i = 0
+		
+	while i < draw_count:
+		var card_inst 
+		var rand_card
+		var suitable = false
+		var drawn_counts = {}
+		
+		while not suitable:
+			suitable = true
+			rand_card = card_types.keys()[randi() % card_types.size()]
+			if "Max" in card_types[rand_card]:
+				if rand_card in inventory:
+					var available = 0
+					if rand_card in drawn_counts:
+						available = drawn_counts[rand_card]
+					if (inventory[rand_card] + available) >= card_types[rand_card]["Max"]:
+						suitable = false
+						
+			
+		card_inst = card_scene.instantiate()
 		add_child(card_inst)
+		
 		card_inst.set_card_info(rand_card, card_types[rand_card])
 		card_inst.show_cost()
+		if rand_card not in drawn_counts:
+			drawn_counts[rand_card] = 1
+		else:
+			drawn_counts += 1
 		
 		drawn_cards.append(card_inst)
+		var x_pos = ((draw_count / 2) - i) * 260
 		
-		var x_pos = ((cards_to_draw / 2) - i) * 260
-		
-		card_inst.position.x += x_pos
-		
-		i += 1		
+		drawn_cards[i].position.x += x_pos
+		i+=1
+	
+	print("did we get here")
 		
 func report_selected():
 	var selected = []
@@ -42,8 +64,3 @@ func report_selected():
 		if child.selected:
 			selected.append(child)
 	return selected
-	
-func new_hand(card_count):
-	for child in drawn_cards:
-		child.queue_free()
-	self.draw_cards(card_count)

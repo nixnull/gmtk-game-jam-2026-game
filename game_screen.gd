@@ -61,22 +61,34 @@ var card_types = {
 		"Proc": proc_is_prime,
 		"Effect": effect_prime_meridian
 	},
+	"Joker": {
+		"Desc": "Gain $500 on funny numbered years.",
+		"Type": "birch",
+		"Cost": calcost_birch.bind(1),
+		"Proc": proc_funny_number,
+		"Effect": update_score.bind(500)
+	},
 
 	"Third Eye": {
 		"Desc": "Fae offer one more boon.",
 		"Type": "willow",
-		"Cost": calcost_thirdeye.bind()
+		"Cost": calcost_thirdeye.bind(),
+		"Max": 4
 	},
 	
 		"Second Lease on Life": {
-		"Desc": "Double your debt (or halve your money) to buy a few more years.",
+		"Desc": "Buy some years, and pay for it every year after.",
 		"Type": "edelwood",
 		"Cost": calcost_edelwood,
-		"Proc": proc_always,
-		"Effect": effect_edelwood,
+		"Bad Proc": proc_always,
+		"Bad Effect": effect_edelwood,
+		"Max": 10
 	}
 
 }
+
+
+var card_scene = load("res://card.tscn")
 
 var turns_left = 50
 var score = -1000
@@ -89,6 +101,8 @@ var selected_cards = []
 var total_selected_cost = 0
 
 var BASE_HAND = 3
+
+var drawn_cards = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -126,9 +140,9 @@ func _process(delta: float) -> void:
 func start():
 	self.visible = true
 	update_score(-200000, true)
-	$Bank.new_hand(BASE_HAND)
 	turns_left = 50
 	owned_cards = {}
+	$Bank.draw_cards(BASE_HAND, owned_cards)
 	$Inventory.display_inventory(owned_cards)
 	update_turns(0)
 	
@@ -196,12 +210,10 @@ func _on_buy_pressed() -> void:
 		$BuyAudio.play()
 		$Inventory.display_inventory(owned_cards)
 		update_turns(total_cost)
-		
-		var cards_to_draw = BASE_HAND
-		
+		var to_draw = BASE_HAND
 		if "Third Eye" in owned_cards:
-			cards_to_draw += owned_cards["Third Eye"]
-		$Bank.new_hand(cards_to_draw)
+			to_draw += owned_cards["Third Eye"]
+		$Bank.draw_cards(to_draw, owned_cards)
 	
 func proc_is_prime():
 	var number = turns_left
@@ -221,6 +233,9 @@ func proc_is_prime():
 func proc_on_timer_multiple(number):
 	return fmod(turns_left, number) == 0
 	
+func proc_funny_number():
+	return turns_left in [7, 13, 69, 420]
+	
 func calcost_birch(cost):
 	return cost
 
@@ -231,7 +246,10 @@ func calcost_thirdeye():
 		return 1
 
 func calcost_edelwood():
-	return 5
+	if "Third Eye" in owned_cards:
+		return -10 + owned_cards["Third Eye"]
+	else:
+		return -10
 
 func proc_always():
 	return true
@@ -246,8 +264,4 @@ func effect_prime_meridian():
 	return turns_left
 
 func effect_edelwood():
-	if score > 0:
-		update_score(-(score / 2))
-	else:
-		update_score(score)
-	owned_cards.erase("Second Lease on Life")
+	update_score(-100)
