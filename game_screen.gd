@@ -98,6 +98,7 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	
 	selected_cards = $Bank.report_selected()
 	total_selected_cost = 0
 	
@@ -138,6 +139,8 @@ func update_turns(turns_lost):
 	turns_left -= turns_lost
 	$"TurnsLeft".text = "Years Remaining\n" + str(turns_left)
 		
+	print("Ok, ", turns_left, " years left...")
+		
 	#Run Card functions
 	for card in owned_cards:
 		for i in range(owned_cards[card]):
@@ -145,11 +148,13 @@ func update_turns(turns_lost):
 				print("Check for proc of " + card + "#" + str(i) + "...")
 				if card_types[card]["Proc"].call():
 					print("It procs!")
+					$Inventory.animate_card(card, false)
 					card_types[card]["Effect"].call()
 			if "Bad Proc" in card_types[card]:
 				print("Check for bad proc of " + card + "#" + str(i) + "...")
 				if card_types[card]["Bad Proc"].call():
 					print("It bad procs!")
+					$Inventory.animate_card(card, true)
 					card_types[card]["Bad Effect"].call()
 					
 	if turns_left <= 0:
@@ -189,6 +194,7 @@ func _on_buy_pressed() -> void:
 		print("empty")
 	else:
 		$BuyAudio.play()
+		$Inventory.display_inventory(owned_cards)
 		update_turns(total_cost)
 		
 		var cards_to_draw = BASE_HAND
@@ -196,10 +202,6 @@ func _on_buy_pressed() -> void:
 		if "Third Eye" in owned_cards:
 			cards_to_draw += owned_cards["Third Eye"]
 		$Bank.new_hand(cards_to_draw)
-		
-		$Inventory.display_inventory(owned_cards)
-		
-		print("Ok, ", turns_left, " years left...")
 	
 func proc_is_prime():
 	var number = turns_left

@@ -2,7 +2,7 @@ extends Node2D
 
 var card_scene = load("res://card.tscn")
 
-var inventory = []
+var inventory = {}
 
 var card_types
 
@@ -17,9 +17,9 @@ func _process(delta: float) -> void:
 
 func display_inventory(owned_cards):
 	for child in inventory: #clear all the previously displayed cards
-		child.visible = false
-		child.queue_free()
-	inventory = []
+		inventory[child].visible = false
+		inventory[child].queue_free()
+	inventory = {}
 	print(owned_cards)
 	var card_count = owned_cards.size()
 	var this_one = 0
@@ -28,9 +28,12 @@ func display_inventory(owned_cards):
 		var card_inst = card_scene.instantiate()
 		add_child(card_inst)
 		card_inst.set_card_info(card, card_types[card])
-		inventory.append(card_inst)
+		inventory[card] = card_inst
 		var x_pos = ((card_count / 2) - this_one) * 260
 		
 		card_inst.position.x += x_pos
 		
 		card_inst.set_count(str(owned_cards[card]))
+		
+func animate_card(card, bad = false):
+	inventory[card].play_animation(bad)

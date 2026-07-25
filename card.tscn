@@ -1,11 +1,27 @@
 [gd_scene format=3 uid="uid://belvm77225t2m"]
 
 [ext_resource type="Script" uid="uid://bbxq81ibqj15q" path="res://card.gd" id="1_rjlel"]
+[ext_resource type="Texture2D" uid="uid://qgqdvu6a2mrx" path="res://assets/animations/activation/activation_animation1.png" id="2_3jvtn"]
 [ext_resource type="Texture2D" uid="uid://geemb3s8k8oq" path="res://assets/contracts/birch_contract.png" id="2_e484p"]
 [ext_resource type="Texture2D" uid="uid://diks800gfvqkn" path="res://assets/contracts/edel_contract.png" id="3_1i5pp"]
+[ext_resource type="Texture2D" uid="uid://dveq2rh7qallc" path="res://assets/animations/activation/activation_animation2.png" id="3_astg2"]
 [ext_resource type="AudioStream" uid="uid://bf5wxbonaesv3" path="res://assets/kenney sfx/handleSmallLeather.ogg" id="3_e484p"]
 [ext_resource type="Texture2D" uid="uid://cybpiofl7r2tn" path="res://assets/contracts/willow_contract.png" id="3_fpac0"]
 [ext_resource type="AudioStream" uid="uid://cpgtjymb5kypr" path="res://assets/kenney sfx/handleSmallLeather2.ogg" id="4_fpac0"]
+[ext_resource type="Texture2D" uid="uid://bpctmw46a5476" path="res://assets/animations/activation/activation_animation3.png" id="4_vhwgv"]
+[ext_resource type="Texture2D" uid="uid://ccd5ngegvqeb8" path="res://assets/animations/activation/activation_animation4.png" id="5_d3p2n"]
+[ext_resource type="Texture2D" uid="uid://oicjhegtdun2" path="res://assets/animations/activation/activation_animation5.png" id="6_xgvo5"]
+[ext_resource type="Texture2D" uid="uid://oqqv0wennkyy" path="res://assets/animations/activation/activation_animation6.png" id="7_p0fm2"]
+[ext_resource type="Texture2D" uid="uid://c88f6lwo73kbi" path="res://assets/animations/activation/activation_animation7.png" id="8_xip4d"]
+[ext_resource type="Texture2D" uid="uid://dqkmttesvr8lk" path="res://assets/animations/activation/activation_animation8.png" id="9_bymj5"]
+[ext_resource type="Texture2D" uid="uid://44yyspyva7ep" path="res://assets/animations/activation/activation_animation9.png" id="10_v2n4i"]
+[ext_resource type="Texture2D" uid="uid://dq3lov0whnqqd" path="res://assets/animations/activation/activation_animation10.png" id="11_3mgwo"]
+[ext_resource type="Texture2D" uid="uid://bc3v6dx5n53fw" path="res://assets/animations/activation/activation_animation11.png" id="12_tt5sl"]
+[ext_resource type="Texture2D" uid="uid://cwhopb13ekhyj" path="res://assets/animations/activation/activation_animation12.png" id="13_dml07"]
+[ext_resource type="Texture2D" uid="uid://y5ygenrssamo" path="res://assets/animations/activation/activation_animation13.png" id="14_y5nun"]
+[ext_resource type="Texture2D" uid="uid://6unxgrfv2kuf" path="res://assets/animations/activation/activation_animation14.png" id="15_alora"]
+[ext_resource type="Texture2D" uid="uid://cben1vm6oy1dq" path="res://assets/animations/activation/activation_animation15.png" id="16_mcjpe"]
+[ext_resource type="Texture2D" uid="uid://ca5srepbl1s0o" path="res://assets/animations/activation/activation_animation16.png" id="17_5tjh1"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_elxoo"]
 animations = [{
@@ -34,12 +50,73 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="SpriteFrames" id="SpriteFrames_etpk0"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_3jvtn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_astg2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_vhwgv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_d3p2n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_xgvo5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_p0fm2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_xip4d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_bymj5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_v2n4i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_3mgwo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_tt5sl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_dml07")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_y5nun")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_alora")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_mcjpe")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_5tjh1")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 15.0
+}]
+
 [node name="Card" type="Node2D" unique_id=1835483064]
 script = ExtResource("1_rjlel")
 
 [node name="Background" type="AnimatedSprite2D" parent="." unique_id=963557881]
 sprite_frames = SubResource("SpriteFrames_elxoo")
 animation = &"edelwood"
+
+[node name="ActivationAnimation" type="AnimatedSprite2D" parent="Background" unique_id=66395257]
+modulate = Color(5.0055983e-06, 0.7515905, 0.21758369, 1)
+sprite_frames = SubResource("SpriteFrames_etpk0")
+frame_progress = 0.26960242
 
 [node name="Title" type="RichTextLabel" parent="." unique_id=21012014]
 offset_left = -118.0
@@ -110,4 +187,8 @@ stream = ExtResource("3_e484p")
 [node name="UnselectAudio" type="AudioStreamPlayer" parent="." unique_id=1932432052]
 stream = ExtResource("4_fpac0")
 
+[node name="AnimationTimer" type="Timer" parent="." unique_id=1129978330]
+one_shot = true
+
 [connection signal="pressed" from="Buy" to="." method="_on_buy_pressed"]
+[connection signal="timeout" from="AnimationTimer" to="." method="_on_animation_timer_timeout"]

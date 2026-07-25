@@ -53,3 +53,17 @@ func get_cost():
 func set_count(count):
 	$CountLabel.text = str(count)
 	$CountLabel.visible = true
+	
+func play_animation(bad = false):
+	$Background/ActivationAnimation.visible = true
+	var color = Color(0.0, 1.0, 0.0, 1.0)
+	if bad:
+		color = Color(1.0, 0.0, 0.0, 1.0)
+	$Background/ActivationAnimation.set("modulate", color)
+	$AnimationTimer.start()
+	print("Start the timer")
+	$Background/ActivationAnimation.play()
+
+
+func _on_animation_timer_timeout() -> void:
+	$Background/ActivationAnimation.stop()
