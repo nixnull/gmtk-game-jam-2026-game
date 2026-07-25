@@ -6,67 +6,67 @@ var card_types = {
 		"Type": "birch",
 		"Cost": calcost_birch.bind(2),
 		"Proc": proc_on_timer_multiple.bind(1),
-		"Effect": update_score.bind(100)
+		"Score": 100
 	},
 	"Two for Twos": {
 		"Desc": "Gain $200 whenever years left is a multiple of two.",
 		"Type": "birch",
 		"Cost": calcost_birch.bind(2),
-		"Proc": proc_on_timer_multiple.bind(1),
-		"Effect": update_score.bind(200)
+		"Proc": proc_on_timer_multiple.bind(2),
+		"Score": 200
 	},
 	"Three for Threes": {
 		"Desc": "Gain $300 whenever years left is a multiple of three.",
 		"Type": "birch",
 		"Cost": calcost_birch.bind(1),
-		"Proc": proc_on_timer_multiple.bind(1),
-		"Effect": update_score.bind(300)
+		"Proc": proc_on_timer_multiple.bind(3),
+		"Score": 300
 	},
 	"Five for Fives": {
 		"Desc": "Gain $500 whenever years left is a multiple of five.",
 		"Type": "birch",
 		"Cost": calcost_birch.bind(1),
-		"Proc": proc_on_timer_multiple.bind(1),
-		"Effect": update_score.bind(500)
+		"Proc": proc_on_timer_multiple.bind(5),
+		"Score": 500
 	},
 	"Seven for Sevens": {
 		"Desc": "Gain $700 whenever years left is a multiple of seven.",
 		"Type": "birch",
 		"Cost": calcost_birch.bind(1),
-		"Proc": proc_on_timer_multiple.bind(1),
-		"Effect": update_score.bind(700)
+		"Proc": proc_on_timer_multiple.bind(7),
+		"Score": 700
 	},
 	"Evens Demons": {
 		"Desc": "Gain $500 on even years, lose $400 on odd years.",
 		"Type": "birch",
 		"Cost": calcost_birch.bind(2),
 		"Proc": proc_on_even,
-		"Effect": update_score.bind(500),
+		"Score": 500,
 		"Bad Proc": proc_on_odd,
-		"Bad Effect": update_score.bind(-400)
+		"Penalty": -400
 	},
 	"Odds Gods": {
 		"Desc": "Gain $500 on odd years, lose $400 on even years.",
 		"Type": "birch",
 		"Cost": calcost_birch.bind(2),
 		"Proc": proc_on_odd,
-		"Effect": update_score.bind(500),
+		"Score": 500,
 		"Bad Proc": proc_on_even,
-		"Bad Effect": update_score.bind(-400)
+		"Penalty": -400
 	},
 	"Prime Meridian": {
 		"Desc": "Gain the number of years left as money if the years left is prime.",
 		"Type": "birch",
 		"Cost": calcost_birch.bind(2),
 		"Proc": proc_is_prime,
-		"Effect": effect_prime_meridian
+		"Score Calc": effect_prime_meridian
 	},
 	"Joker": {
 		"Desc": "Gain $500 on funny numbered years.",
 		"Type": "birch",
 		"Cost": calcost_birch.bind(1),
 		"Proc": proc_funny_number,
-		"Effect": update_score.bind(500)
+		"Score": 500
 	},
 
 	"Third Eye": {
@@ -80,7 +80,7 @@ var card_types = {
 		"Type": "edelwood",
 		"Cost": calcost_birch.bind(-10),
 		"Bad Proc": proc_always,
-		"Bad Effect": effect_edelwood,
+		"Penalty Calc": effect_edelwood,
 		"Max": 10
 	},
 	"Refreshing Potion": {
@@ -94,7 +94,7 @@ var card_types = {
 		"Type": "birch",
 		"Cost": calcost_tradehalf,
 		"Proc": on_buy.bind("Live Fast, Die Young"),
-		"Effect": effect_tradehalf
+		"Score Calc": effect_tradehalf
 	}
 }
 
@@ -161,28 +161,42 @@ func stop():
 	self.visible = false
 	
 func update_turns(turns_lost):
+	var pending_scores = []
+	var turn_net_score = 0
+	
 	turns_left_before_procs = turns_left
 	turns_left -= turns_lost
 	$"TurnsLeft".text = "Years Remaining\n" + str(turns_left)
 		
 	print("Ok, ", turns_left, " years left...")
-		
+	
 	#Run Card functions
 	for card in owned_cards:
 		for i in range(owned_cards[card]):
+			var pending_value = 0
 			if "Proc" in card_types[card]:
 				print("Check for proc of " + card + "#" + str(i) + "...")
 				if card_types[card]["Proc"].call():
 					print("It procs!")
 					$Inventory.animate_card(card, false)
-					card_types[card]["Effect"].call()
+					if card_types[card].get("Score Calc",0) is Callable:
+						pending_value = card_types[card]["Score Calc"].call()
+					else:
+						pending_value = card_types[card].get("Score",0)
 			if "Bad Proc" in card_types[card]:
 				print("Check for bad proc of " + card + "#" + str(i) + "...")
 				if card_types[card]["Bad Proc"].call():
 					print("It bad procs!")
 					$Inventory.animate_card(card, true)
-					card_types[card]["Bad Effect"].call()
-					
+					if card_types[card].get("Penalty Calc",0) is Callable:
+						pending_value = card_types[card]["Penalty Calc"].call()
+					else:
+						pending_value = card_types[card].get("Penalty",0)
+			pending_scores.append(pending_value)
+	
+	turn_net_score = pending_scores.reduce(func(sum,val): return sum + val, 0)
+	update_score(turn_net_score)
+	
 	if turns_left <= 0:
 		game_over.emit(score)
 
@@ -276,7 +290,7 @@ func effect_prime_meridian():
 	return turns_left
 
 func effect_edelwood():
-	update_score(-100)
+	return -100
 	
 func effect_potion():
 	var to_draw = BASE_HAND + owned_cards.get("Third Eye",0)
@@ -295,7 +309,7 @@ func _on_refresh_pressed() -> void:
 func effect_tradehalf():
 	var half_turns_left = int(round(turns_left_before_procs * 0.5))
 	var tradehalf_big_money = half_turns_left * 1000
-	update_score(tradehalf_big_money)
+	return tradehalf_big_money
 	
 func calcost_tradehalf():
 	return int(round(turns_left * 0.5))
