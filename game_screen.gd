@@ -4,7 +4,7 @@ var card_types = {
 	"One for Ones": {
 		"Desc": "Gain $100 whenever years left is a multiple of one.",
 		"Type": "birch",
-		"Cost": calcost_birch.bind(1),
+		"Cost": calcost_birch.bind(2),
 		"Proc": proc_on_timer_multiple.bind(1),
 		"Effect": update_score.bind(100)
 	},
@@ -12,28 +12,28 @@ var card_types = {
 		"Desc": "Gain $200 whenever years left is a multiple of two.",
 		"Type": "birch",
 		"Cost": calcost_birch.bind(2),
-		"Proc": proc_on_timer_multiple.bind(2),
+		"Proc": proc_on_timer_multiple.bind(1),
 		"Effect": update_score.bind(200)
 	},
 	"Three for Threes": {
 		"Desc": "Gain $300 whenever years left is a multiple of three.",
 		"Type": "birch",
-		"Cost": calcost_birch.bind(3),
-		"Proc": proc_on_timer_multiple.bind(3),
+		"Cost": calcost_birch.bind(1),
+		"Proc": proc_on_timer_multiple.bind(1),
 		"Effect": update_score.bind(300)
 	},
 	"Five for Fives": {
 		"Desc": "Gain $500 whenever years left is a multiple of five.",
 		"Type": "birch",
-		"Cost": calcost_birch.bind(5),
-		"Proc": proc_on_timer_multiple.bind(5),
+		"Cost": calcost_birch.bind(1),
+		"Proc": proc_on_timer_multiple.bind(1),
 		"Effect": update_score.bind(500)
 	},
 	"Seven for Sevens": {
 		"Desc": "Gain $700 whenever years left is a multiple of seven.",
 		"Type": "birch",
-		"Cost": calcost_birch.bind(7),
-		"Proc": proc_on_timer_multiple.bind(7),
+		"Cost": calcost_birch.bind(1),
+		"Proc": proc_on_timer_multiple.bind(1),
 		"Effect": update_score.bind(700)
 	},
 	"Evens Demons": {
@@ -78,7 +78,7 @@ var card_types = {
 	"Second Lease on Life": {
 		"Desc": "Buy some years, and pay for it every year after.",
 		"Type": "edelwood",
-		"Cost": calcost_edelwood,
+		"Cost": calcost_birch.bind(10),
 		"Bad Proc": proc_always,
 		"Bad Effect": effect_edelwood,
 		"Max": 10
@@ -97,7 +97,6 @@ var card_types = {
 		"Effect": effect_tradehalf
 	}
 }
-
 
 var card_scene = load("res://card.tscn")
 
@@ -310,6 +309,3 @@ func on_buy(proc_card_name):
 			var bought_card_index = selected_cards.find(bought_card_packed[1])
 			selected_cards.pop_at(bought_card_index)
 			return true
-		
-	
-		

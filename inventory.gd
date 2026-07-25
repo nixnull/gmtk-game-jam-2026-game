@@ -33,7 +33,10 @@ func display_inventory(owned_cards):
 		
 		card_inst.position.x += x_pos
 		
-		card_inst.set_count(str(owned_cards[card]))
+		if "Max" in card_types[card]:
+			card_inst.set_count(str(owned_cards[card]) + "/" + str(card_types[card]["Max"]))
+		else:
+			card_inst.set_count(str(owned_cards[card]))
 		
 func animate_card(card, bad = false):
 	inventory[card].play_animation(bad)
