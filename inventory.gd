@@ -51,5 +51,8 @@ func display_inventory(owned_cards):
 func animate_card(card, bad = false):
 	inventory[card].play_animation(bad)
 	
+func animate_negated_card(card):
+	inventory[card].play_negate_animation()
+	
 func show_card_score(card, score):
 	inventory[card].show_score(score)

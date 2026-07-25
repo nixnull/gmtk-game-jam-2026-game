@@ -80,7 +80,8 @@ var card_types = {
 		"Desc": "Fae offer one more boon.",
 		"Type": "willow",
 		"Cost": calcost_thirdeye.bind(),
-		"Max": 4
+		"Max": 4,
+		"Tags": ["Organ"]
 	},
 	"Second Lease on Life": {
 		"Desc": "Buy some years, and pay for it every year after.",
@@ -109,6 +110,29 @@ var card_types = {
 		"Cost": calcost_birch.bind(10),
 		"Max": 1,
 		"End of Scoring Effect": effect_crypto
+	},
+	"Vestigial Wings": {
+		"Desc": "You ignore the lowest penalty applied each turn.",
+		"Type": "willow",
+		"Cost": calcost_birch.bind(5),
+		"Max": 1,
+		"End of Scoring Effect": effect_wings,
+		"Tags": ["Organ"]
+	},
+	"Monkey's Paw": {
+		"Desc": "Each turn, if less than 2 types of cards would score, they score twice.",
+		"Type": "willow",
+		"Cost": calcost_birch.bind(8),
+		"Max": 1,
+		"End of Scoring Effect": effect_monkey_paw,
+		"Tags": ["Organ"]
+		},
+	"Organ Donation": {
+		"Desc": "Sell all of your fae organs and body parts for $1000 each.",
+		"Type": "birch",
+		"Cost": calcost_birch.bind(10),
+		"Proc": on_buy.bind("Organ Donation"),
+		"Boon": effect_organ_donation
 	}
 	
 }
@@ -197,6 +221,7 @@ func update_turns(turns_lost):
 					print("It procs!")
 					$PlacementControl/Inventory.animate_card(card, false)
 					var effects = card_types[card]["Boon"].call()
+					print(effects)
 					if card in card_score_changes:
 						card_score_changes[card] += effects["Score"]
 					else:
@@ -226,6 +251,7 @@ func update_turns(turns_lost):
 		$PlacementControl/Inventory.show_card_score(card, card_score_changes[card])
 		turn_net_score += card_score_changes[card]
 		
+	print(card_score_changes)
 	update_score(turn_net_score)
 	
 	if turns_left <= 0:
@@ -333,7 +359,6 @@ func _on_refresh_pressed() -> void:
 		owned_cards["Refreshing Potion"] -= 1
 	else:
 		owned_cards.erase("Refreshing Potion")
-		
 		$PlacementControl/Refresh.hide()
 	$PlacementControl/Inventory.display_inventory(owned_cards)
 
@@ -355,14 +380,14 @@ func on_buy(proc_card_name):
 			selected_cards.pop_at(bought_card_index)
 			return true
 
-func effect_crypto(card_score_changes):
-	for card in card_score_changes:
-		var value = card_score_changes[card]
+func effect_crypto(crypto_score_changes):
+	for card in crypto_score_changes:
+		var value = crypto_score_changes[card]
 		if value > 0:
-			card_score_changes[card] = value * 2
+			crypto_score_changes[card] = value * 2
 		else:
-			card_score_changes[card] = value * 3
-	return card_score_changes
+			crypto_score_changes[card] = value * 3
+	return crypto_score_changes
 	
 func effect_flat_score_change(score_change):
 	return {"Score": score_change}
@@ -372,3 +397,46 @@ func proc_on_perfect_square():
 
 func effect_square_root_score():
 	return {"Score": turns_left * 100}
+	
+func effect_wings(wings_card_scores):
+	var lowest_penalty = 0
+	for card in wings_card_scores:
+		var value = wings_card_scores[card]
+		if value < 0 and (lowest_penalty == 0 or lowest_penalty < value):
+			lowest_penalty = value
+	for card in wings_card_scores:
+		if wings_card_scores[card] == lowest_penalty:
+			wings_card_scores.erase(card)
+			$PlacementControl/Inventory.animate_negated_card(card)
+			break
+	return wings_card_scores
+		
+func effect_monkey_paw(paw_card_scores):
+	var positive_triggers = 0
+	for card in paw_card_scores:
+		if paw_card_scores[card] > 0:
+			positive_triggers += 1
+	if positive_triggers < 3:
+		for card in paw_card_scores:
+			if paw_card_scores[card] > 0:
+				paw_card_scores[card] *= 2
+	else:
+		$PlacementControl/Inventory.animate_negated_card("Monkey\'s Paw")
+	return paw_card_scores
+
+func effect_organ_donation():
+	var organs = []
+	var sold_organ_count = 0
+	for card_type in card_types:
+		if "Organ" in card_types[card_type].get("Tags",[]):
+			organs.append(card_type)
+	for card in $PlacementControl/Inventory.inventory:
+		if card in organs:
+			sold_organ_count += owned_cards[card]
+			owned_cards.erase(card)
+	$PlacementControl/Inventory.display_inventory(owned_cards)	
+	var organ_sale_value: int = sold_organ_count * 1000 
+	if organ_sale_value == 0:
+		$PlacementControl/Inventory.animate_negated_card("Organ Donation")
+	return {"Score": organ_sale_value}
+	
