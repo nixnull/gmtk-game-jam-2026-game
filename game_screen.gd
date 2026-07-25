@@ -290,7 +290,7 @@ func _on_refresh_pressed() -> void:
 		owned_cards.erase("Refreshing Potion")
 		
 		$Refresh.hide()
-		$Inventory.display_inventory(owned_cards)
+	$Inventory.display_inventory(owned_cards)
 
 func effect_tradehalf():
 	var half_turns_left = int(round(turns_left_before_procs * 0.5))
