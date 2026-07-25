@@ -126,7 +126,14 @@ var card_types = {
 		"Max": 1,
 		"End of Scoring Effect": effect_monkey_paw,
 		"Tags": ["Organ"]
-		}
+		},
+	"Organ Donation": {
+		"Desc": "Sell all of your fae organs and body parts for $1000 each.",
+		"Type": "birch",
+		"Cost": calcost_birch.bind(10),
+		"Proc": on_buy.bind("Organ Donation"),
+		"Boon": effect_organ_donation
+	}
 	
 }
 
@@ -214,6 +221,7 @@ func update_turns(turns_lost):
 					print("It procs!")
 					$PlacementControl/Inventory.animate_card(card, false)
 					var effects = card_types[card]["Boon"].call()
+					print(effects)
 					if card in card_score_changes:
 						card_score_changes[card] += effects["Score"]
 					else:
@@ -351,7 +359,6 @@ func _on_refresh_pressed() -> void:
 		owned_cards["Refreshing Potion"] -= 1
 	else:
 		owned_cards.erase("Refreshing Potion")
-		
 		$PlacementControl/Refresh.hide()
 	$PlacementControl/Inventory.display_inventory(owned_cards)
 
@@ -416,3 +423,20 @@ func effect_monkey_paw(paw_card_scores):
 	else:
 		$PlacementControl/Inventory.animate_negated_card("Monkey\'s Paw")
 	return paw_card_scores
+
+func effect_organ_donation():
+	var organs = []
+	var sold_organ_count = 0
+	for card_type in card_types:
+		if "Organ" in card_types[card_type].get("Tags",[]):
+			organs.append(card_type)
+	for card in $PlacementControl/Inventory.inventory:
+		if card in organs:
+			sold_organ_count += owned_cards[card]
+			owned_cards.erase(card)
+	$PlacementControl/Inventory.display_inventory(owned_cards)	
+	var organ_sale_value: int = sold_organ_count * 1000 
+	if organ_sale_value == 0:
+		$PlacementControl/Inventory.animate_negated_card("Organ Donation")
+	return {"Score": organ_sale_value}
+	
