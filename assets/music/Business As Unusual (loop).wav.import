@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://o0m2lgijlsco"
+path="res://.godot/imported/Business As Unusual (loop).wav-8b5bc3bf44f9d6559db88226c7ca0fbc.sample"
+
+[deps]
+
+source_file="res://assets/music/Business As Unusual (loop).wav"
+dest_files=["res://.godot/imported/Business As Unusual (loop).wav-8b5bc3bf44f9d6559db88226c7ca0fbc.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2
