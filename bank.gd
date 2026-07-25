@@ -45,10 +45,7 @@ func draw_cards(draw_count, inventory) -> void:
 		
 		card_inst.set_card_info(rand_card, card_types[rand_card])
 		card_inst.show_cost()
-		if rand_card not in drawn_counts:
-			drawn_counts[rand_card] = 1
-		else:
-			drawn_counts[rand_card] += 1
+		drawn_counts[rand_card] = drawn_counts.get(rand_card,0) + 1
 		
 		drawn_cards.append(card_inst)
 		var x_pos = ((draw_count / 2) - i) * 260
