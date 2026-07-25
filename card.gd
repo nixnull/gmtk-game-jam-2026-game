@@ -64,14 +64,25 @@ func play_animation(bad = false):
 	print("Start the timer")
 	$Background/ActivationAnimation.play()
 
+func play_negate_animation():
+	$Background/ActivationAnimation.visible = true
+	var color = Color(0.134, 0.123, 1.0, 1.0)
+	$Background/ActivationAnimation.set("modulate", color)
+	$AnimationTimer.start()
+	print("Start the timer")
+	$Background/ActivationAnimation.play()
+
 func show_score(score):
 	var txt = ""
-	if score >= 0:
+	if score > 0:
 		$ScoreLabel.set("modulate", Color(0.0, 1.0, 0.0, 1.0))
 		txt += "+"
-	else:
+	elif score < 0:
 		$ScoreLabel.set("modulate", Color(1.0, 0.0, 0.0, 1.0))
 		txt += "-"
+	else:
+		$ScoreLabel.set("modulate", Color(0.134, 0.123, 1.0, 1.0))
+		txt = "Negated"
 	txt += str(score)
 	$ScoreLabel.text = txt
 	$ScoreLabel.show()
