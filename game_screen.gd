@@ -76,13 +76,20 @@ var card_types = {
 		"Max": 4
 	},
 	
-		"Second Lease on Life": {
+	"Second Lease on Life": {
 		"Desc": "Buy some years, and pay for it every year after.",
 		"Type": "edelwood",
 		"Cost": calcost_edelwood,
 		"Bad Proc": proc_always,
 		"Bad Effect": effect_edelwood,
 		"Max": 10
+	},
+	
+	"Refreshing Potion": {
+		"Desc": "Refreshes your palate, and your store.",
+		"Type": "willow",
+		"Cost": calcost_birch.bind(3),
+		"Max": 3
 	}
 
 }
@@ -203,6 +210,8 @@ func _on_buy_pressed() -> void:
 			owned_cards[card_title] += 1
 		else:
 			owned_cards[card_title] = 1
+			if card_title == "Refreshing Potion":
+				$Refresh.show()
 	
 	if selected_cards.is_empty():
 		print("empty")
@@ -210,9 +219,7 @@ func _on_buy_pressed() -> void:
 		$BuyAudio.play()
 		$Inventory.display_inventory(owned_cards)
 		update_turns(total_cost)
-		var to_draw = BASE_HAND
-		if "Third Eye" in owned_cards:
-			to_draw += owned_cards["Third Eye"]
+		var to_draw = BASE_HAND + owned_cards.get("Third Eye",0)
 		$Bank.draw_cards(to_draw, owned_cards)
 	
 func proc_is_prime():
@@ -265,3 +272,16 @@ func effect_prime_meridian():
 
 func effect_edelwood():
 	update_score(-100)
+	
+func effect_potion():
+	var to_draw = BASE_HAND + owned_cards.get("Third Eye",0)
+	$Bank.draw_cards(to_draw, owned_cards)
+
+func _on_refresh_pressed() -> void:
+	effect_potion()
+	if owned_cards.get("Refreshing Potion",0) > 1:
+		owned_cards["Refreshing Potion"] -= 1
+	else:
+		owned_cards.erase("Refreshing Potion")
+		$Refresh.hide()
+		$Inventory.display_inventory(owned_cards)
