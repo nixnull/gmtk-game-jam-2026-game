@@ -78,7 +78,7 @@ var card_types = {
 	"Second Lease on Life": {
 		"Desc": "Buy some years, and pay for it every year after.",
 		"Type": "edelwood",
-		"Cost": calcost_birch.bind(10),
+		"Cost": calcost_birch.bind(-10),
 		"Bad Proc": proc_always,
 		"Bad Effect": effect_edelwood,
 		"Max": 10
