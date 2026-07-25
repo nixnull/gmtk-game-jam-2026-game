@@ -75,4 +75,13 @@ vertical_alignment = 1
 [node name="BuyAudio" type="AudioStreamPlayer" parent="." unique_id=1338669406]
 stream = ExtResource("4_yla3h")
 
+[node name="Button" type="Button" parent="." unique_id=1962541609]
+visible = false
+offset_left = 673.0
+offset_top = 200.0
+offset_right = 739.0
+offset_bottom = 253.0
+text = "Drink
+Potion"
+
 [connection signal="pressed" from="Buy" to="." method="_on_buy_pressed"]
