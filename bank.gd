@@ -21,12 +21,12 @@ func draw_cards(draw_count, inventory) -> void:
 	drawn_cards = []
 		
 	var i = 0
+	var drawn_counts = {}
 		
 	while i < draw_count:
 		var card_inst 
 		var rand_card
 		var suitable = false
-		var drawn_counts = {}
 		
 		while not suitable:
 			suitable = true
@@ -48,7 +48,7 @@ func draw_cards(draw_count, inventory) -> void:
 		if rand_card not in drawn_counts:
 			drawn_counts[rand_card] = 1
 		else:
-			drawn_counts += 1
+			drawn_counts[rand_card] += 1
 		
 		drawn_cards.append(card_inst)
 		var x_pos = ((draw_count / 2) - i) * 260
