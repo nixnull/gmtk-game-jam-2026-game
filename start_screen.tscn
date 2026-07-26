@@ -18,7 +18,7 @@ grow_horizontal = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_font_sizes/normal_font_size = 32
-text = "Countdown Game"
+text = "Fae Day Loans"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -37,11 +37,9 @@ grow_vertical = 0
 theme_override_font_sizes/normal_font_size = 28
 text = "Made for GMTK Game Jam 2026
 
-Code: nix, shirkbot, grok*
+Code: nix, shirkbot, iamgrok
 Art: Shirkbot
-Music: grok*
-
-(*not the AI)
+Music: iamgrok
 
 SFX from Kenney.nl
 
@@ -77,11 +75,9 @@ offset_right = 512.0
 offset_bottom = -72.0
 grow_vertical = 0
 theme_override_font_sizes/normal_font_size = 25
-text = "You owe a great debt to Down, Count of the Fae Kingdom. If you do not pay before the end of your life, you will spend afterlife indebted to him.
+text = "You owe a great debt. So naturally, you've made the wise decision to get a few loans from the Fae to pay it off. The only cost is years of your life. You weren't going to enjoy them if you were in debt anyway.
 
-Luckily, you can bargain with other Fae to trade years of your life boons.
-
-Pay off your life before it's over, so that you may at least be free in the afterlife."
+Pay off your life before it's over, so that you may at least be free in the afterlife. If you negotiate well, maybe you'll even die rich."
 horizontal_alignment = 1
 vertical_alignment = 1
 
