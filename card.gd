@@ -73,6 +73,7 @@ func play_negate_animation():
 	$Background/ActivationAnimation.play()
 
 func show_score(score):
+	print($Title.text, score)
 	var txt = ""
 	if score > 0:
 		$ScoreLabel.set("modulate", Color(0.0, 1.0, 0.0, 1.0))

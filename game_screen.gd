@@ -109,14 +109,16 @@ var card_types = {
 		"Type": "willow",
 		"Cost": calcost_birch.bind(10),
 		"Max": 1,
-		"End of Scoring Effect": effect_crypto
+		"PostProc": proc_always,
+		"PostEffect": effect_crypto
 	},
 	"Vestigial Wings": {
 		"Desc": "You ignore the lowest penalty applied each turn.",
 		"Type": "willow",
 		"Cost": calcost_birch.bind(5),
 		"Max": 1,
-		"End of Scoring Effect": effect_wings,
+		"PostProc": proc_always,
+		"PostEffect": effect_wings,
 		"Tags": ["Organ"]
 	},
 	"Monkey's Paw": {
@@ -124,17 +126,17 @@ var card_types = {
 		"Type": "willow",
 		"Cost": calcost_birch.bind(8),
 		"Max": 1,
-		"End of Scoring Effect": effect_monkey_paw,
+		"PostProc": proc_always,
+		"PostEffect": effect_monkey_paw,
 		"Tags": ["Organ"]
 		},
 	"Organ Donation": {
 		"Desc": "Sell all of your fae organs and body parts for $1000 each.",
 		"Type": "birch",
-		"Cost": calcost_birch.bind(10),
-		"Proc": on_buy.bind("Organ Donation"),
-		"Boon": effect_organ_donation
+		"Cost": calcost_birch.bind(1),
+		"PreProc": proc_always,
+		"PreEffect": effect_organ_donation
 	}
-	
 }
 
 var card_scene = load("res://card.tscn")
@@ -213,6 +215,17 @@ func update_turns(turns_lost):
 	
 	#Run Card functions
 	var card_score_changes = {}
+	#PreEffects
+	for card in owned_cards:
+		for i in range(owned_cards[card]):
+			if "PreProc" in card_types[card]:
+				print("Check for preproc of " + card + "#" + str(i) + "...")
+				if card_types[card]["PreProc"].call():
+					print("It preprocs!")
+					$PlacementControl/Inventory.animate_card(card, false)
+					card_score_changes[card] = card_types[card]["PreEffect"].call()["Score"]
+	
+	#Boons and Penalties	
 	for card in owned_cards:
 		for i in range(owned_cards[card]):
 			if "Proc" in card_types[card]:
@@ -232,26 +245,31 @@ func update_turns(turns_lost):
 					print("It bad procs!")
 					$PlacementControl/Inventory.animate_card(card, true)
 					var effects = card_types[card]["Penalty"].call()
+					
 					if card in card_score_changes:
 						card_score_changes[card] += effects["Score"]
 					else:
 						card_score_changes[card] = effects["Score"]
-			if "End of Scoring Effect" in card_types[card]:
-				$PlacementControl/Inventory.animate_card(card, false)
-				end_of_scoring_queue.append(card_types[card]["End of Scoring Effect"])
 	
-	if len(end_of_scoring_queue) > 0:
-		print("end of scoring routine start")
-		for effect in end_of_scoring_queue:
-			print("executing routine")
-			card_score_changes = effect.call(card_score_changes)
+	#Post Effects
+	for card in owned_cards:
+		for i in range(owned_cards[card]):
+			if "PostProc" in card_types[card]:
+				print("Check for postproc of " + card + "#" + str(i) + "...")
+				if card_types[card]["PostProc"].call():
+					print("It postprocs!")
+					$PlacementControl/Inventory.animate_card(card, false)
+					print(card)
+					card_score_changes = card_types[card]["PostEffect"].call(card_score_changes)
 			
 	#Apply scores
+	#print(card_score_changes)
 	for card in card_score_changes:
-		$PlacementControl/Inventory.show_card_score(card, card_score_changes[card])
+		if card in owned_cards: #Handle cards that were erased
+			$PlacementControl/Inventory.show_card_score(card, card_score_changes[card])
 		turn_net_score += card_score_changes[card]
 		
-	print(card_score_changes)
+	#print(card_score_changes)
 	update_score(turn_net_score)
 	
 	if turns_left <= 0:
@@ -271,6 +289,15 @@ func update_score(amount, setting=false):
 		$Score.set("theme_override_colors/default_color", Color(0.996, 0.0, 0.164, 1.0))
 		
 	$Score.text = valiance + "\n$" + str(score)
+	if amount >= 0:
+		$ScoreChange.set("theme_override_colors/default_color", Color(0.064, 0.632, 0.422, 1.0))
+		$ScoreChange.text = "+" + str(amount)
+	else:
+		$ScoreChange.set("theme_override_colors/default_color", Color(0.996, 0.0, 0.164, 1.0))
+		$ScoreChange.text = str(amount)
+	if not setting:
+		$ScoreChange.show()
+		$ScoreChangeShowTimer.start()
 	
 func _on_buy_pressed() -> void:
 	selected_cards = $PlacementControl/Bank.report_selected()
@@ -434,9 +461,12 @@ func effect_organ_donation():
 		if card in organs:
 			sold_organ_count += owned_cards[card]
 			owned_cards.erase(card)
+	owned_cards.erase("Organ Donation")
 	$PlacementControl/Inventory.display_inventory(owned_cards)	
-	var organ_sale_value: int = sold_organ_count * 1000 
-	if organ_sale_value == 0:
-		$PlacementControl/Inventory.animate_negated_card("Organ Donation")
+	var organ_sale_value: int = sold_organ_count * 2000 
 	return {"Score": organ_sale_value}
 	
+
+
+func _on_score_change_show_timer_timeout() -> void:
+	$ScoreChange.hide()
